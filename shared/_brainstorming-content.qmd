@@ -18,11 +18,11 @@ Questions are tagged to indicate primary ownership. Many questions are relevant 
 
 | Tag | Role | Focus Area |
 |-----|------|------------|
-| {{< fa building >}} **CEO** | Chief Executive Officer | Mission alignment, organizational direction, stakeholder communication |
-| {{< fa dollar-sign >}} **CFO** | Chief Financial Officer | Budget, ROI, cost modeling, capital allocation, financial risk |
-| {{< fa shield >}} **CSO** | Chief Security Officer | Data security, access controls, adversarial threats, clearances, compliance |
-| {{< fa microchip >}} **CTO** | Chief Technology Officer | Architecture, platforms, build/buy, engineering standards, technical debt |
-| {{< fa globe >}} **CGO** | Chief Geospatial Officer | Geospatial strategy, GIS modernization, spatial data infrastructure, domain alignment |
+| **CEO** | Chief Executive Officer | Mission alignment, organizational direction, stakeholder communication |
+| **CFO** | Chief Financial Officer | Budget, ROI, cost modeling, capital allocation, financial risk |
+| **CSO** | Chief Security Officer | Data security, access controls, adversarial threats, clearances, compliance |
+| **CTO** | Chief Technology Officer | Architecture, platforms, build/buy, engineering standards, technical debt |
+| **CGO** | Chief Geospatial Officer | Geospatial strategy, GIS modernization, spatial data infrastructure, domain alignment |
 
 ### Level Tags
 
