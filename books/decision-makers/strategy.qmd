@@ -1,0 +1,47 @@
+---
+title: "GeoAI Strategy"
+---
+
+# Defining Your GeoAI Vision
+
+Every successful GeoAI program starts with a clear answer to: **"Why are we investing in GeoAI, and what outcomes do we expect?"**
+
+::: {.callout-tip}
+## Alignment Point
+Developers reference your strategic vision in [Getting Started — Understanding Your Organization's GeoAI Strategy](../developers/getting-started.qmd). Make sure this chapter is concrete enough for a developer to understand priorities and boundaries.
+:::
+
+## Key Questions for Leadership
+
+1. What mission outcomes will GeoAI improve?
+2. Where does geospatial data already play a critical role in our operations?
+3. What is our risk appetite for AI-generated geospatial products?
+4. Are we building internal capability, buying solutions, or both?
+5. What does success look like in 6 months? In 2 years?
+
+## Building a GeoAI Strategy Statement
+
+A useful strategy statement includes:
+
+| Component | Description | Example |
+|-----------|-------------|---------|
+| **Mission link** | Which organizational mission does this serve? | Disaster response situational awareness |
+| **Capability** | What GeoAI capability are we building? | Automated building-damage assessment |
+| **Data foundation** | What geospatial data underpins this? | Commercial satellite imagery (0.5m) |
+| **Success metric** | How will we measure impact? | Assessment delivered within 4 hours of event |
+| **Timeline** | When do we expect initial operating capability? | Q3 2026 |
+
+## Prioritization Framework
+
+Not every GeoAI idea deserves immediate investment. Use a simple 2×2 matrix:
+
+- **X-axis:** Mission impact (low → high)
+- **Y-axis:** Feasibility with current data and talent (low → high)
+
+Focus first on the **high-impact, high-feasibility** quadrant. Move to high-impact / lower-feasibility items only after building foundational capabilities.
+
+## Next Steps
+
+- [ ] Draft your GeoAI strategy statement
+- [ ] Identify 2-3 pilot use cases using the prioritization framework
+- [ ] Share the strategy with your development team so they can align their work

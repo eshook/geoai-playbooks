@@ -1,0 +1,78 @@
+---
+title: "Getting Started"
+---
+
+# Getting Started with GeoAI at Your Organization
+
+Before writing any code, understand the strategic context you are operating in. Your organization's GeoAI strategy defines what you should build, what data you can use, and what governance gates you must pass.
+
+## Understanding Your Organization's GeoAI Strategy
+
+::: {.callout-tip}
+## Alignment Point
+Your organization's GeoAI strategy is defined in the [Decision Maker Playbook — Strategy](../decision-makers/strategy.qmd) chapter. Read it before starting a new project.
+:::
+
+Before beginning any GeoAI project, answer these questions:
+
+1. **What is the approved use case?** — Confirm your project aligns with the organizational strategy and Acceptable Use Policy.
+2. **What data am I authorized to use?** — Check the data catalog and licensing constraints.
+3. **What governance gates must I pass?** — Know the review requirements before you start, not after.
+4. **Who are my stakeholders?** — Identify the Model Owner, domain experts, and governance reviewers.
+5. **What does "done" look like?** — Understand the success metrics defined in the strategy.
+
+## Your Role in the GeoAI Team
+
+Depending on your organization's team structure, you may fill one or more of these roles:
+
+| Role | Primary Responsibilities |
+|------|------------------------|
+| **GeoAI Engineer** | Model development, training, evaluation |
+| **Data Engineer** | Data pipelines, ETL, catalog management |
+| **MLOps Engineer** | Deployment, monitoring, infrastructure |
+| **Domain Specialist** | Requirements, validation, interpretation |
+
+## Setting Up Your Development Environment
+
+### Prerequisites
+
+```bash
+# Python environment (3.10+)
+python -m venv .venv
+source .venv/bin/activate
+
+# Core geospatial + ML dependencies
+pip install rasterio geopandas shapely pyproj
+pip install torch torchvision  # or tensorflow
+pip install scikit-learn xgboost
+
+# MLOps and experiment tracking
+pip install mlflow dvc
+```
+
+### Project Structure Convention
+
+```
+my-geoai-project/
+├── data/
+│   ├── raw/              # Original, immutable data
+│   ├── processed/        # Cleaned and transformed data
+│   └── catalog.yml       # Data catalog entries
+├── models/
+│   ├── training/         # Training scripts
+│   ├── evaluation/       # Evaluation scripts and results
+│   └── cards/            # Model cards
+├── pipelines/            # Data and ML pipelines
+├── notebooks/            # Exploratory notebooks
+├── tests/                # Unit and integration tests
+└── README.md
+```
+
+## Checklist: Before You Start a New Project
+
+- [ ] Reviewed organizational GeoAI strategy
+- [ ] Confirmed use case is covered by the Acceptable Use Policy
+- [ ] Identified data sources and confirmed access authorization
+- [ ] Opened a Model Intake request (see shared procedure: model-intake)
+- [ ] Set up project repository following the structure convention
+- [ ] Identified governance reviewer and scheduled initial consultation

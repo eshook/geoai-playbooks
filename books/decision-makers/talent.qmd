@@ -1,0 +1,44 @@
+---
+title: "Building GeoAI Teams"
+---
+
+# Talent & Team Strategy
+
+GeoAI sits at the intersection of geospatial science, AI/ML engineering, and domain expertise. Building the right team — or growing the one you have — is a strategic decision.
+
+::: {.callout-tip}
+## Alignment Point
+Developers learn about their role in the team in [Getting Started — Your Role in the GeoAI Team](../developers/getting-started.qmd). The team structures you define here set expectations for their daily work.
+:::
+
+## Key Questions
+
+1. What GeoAI roles do we need?
+2. Do we build internal talent, hire, or contract?
+3. How do we upskill our existing geospatial analysts?
+4. What training and professional development should we invest in?
+
+## Core GeoAI Roles
+
+| Role | Skills | Typical Background |
+|------|--------|-------------------|
+| **GeoAI Engineer** | ML/DL, geospatial data, cloud infrastructure | CS/EE + geospatial |
+| **Geospatial Data Engineer** | ETL, cloud-native geo formats, data pipelines | GIS + data engineering |
+| **Domain Expert** | Mission knowledge, requirements definition | Analyst, planner, scientist |
+| **ML Ops Engineer** | Model deployment, monitoring, CI/CD | DevOps + ML |
+| **Responsible AI Lead** | Bias evaluation, policy translation, auditing | Ethics, policy, or data science |
+
+## Team Topologies
+
+Depending on organizational size:
+
+- **Embedded model** — GeoAI practitioners sit within mission teams
+- **Center of Excellence** — A centralized GeoAI team serves multiple missions
+- **Hybrid** — Core platform team + embedded specialists
+
+## Next Steps
+
+- [ ] Assess current team capabilities against the roles above
+- [ ] Identify critical skill gaps
+- [ ] Define a hiring or upskilling plan
+- [ ] Establish a GeoAI community of practice

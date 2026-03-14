@@ -1,0 +1,114 @@
+---
+title: "Deployment & Monitoring"
+---
+
+# Deploying GeoAI Models
+
+Deployment is not the finish line — it is the beginning of operational responsibility. This chapter covers how to deploy models within your organization's approved infrastructure and keep them running safely.
+
+## Pre-Deployment Checklist
+
+Before deploying any model:
+
+- [ ] Governance review status is **"Approved"** in the Model Registry
+- [ ] Infrastructure environment is provisioned and approved
+- [ ] Monitoring and alerting are configured
+- [ ] Incident response procedure is documented
+- [ ] Rollback plan is defined and tested
+
+## Deployment Patterns
+
+### Batch Inference
+
+For periodic processing of large geospatial datasets:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Batch inference pipeline pattern"
+
+def batch_inference(model, input_tiles, output_dir, registry_id):
+    """Run batch inference on geospatial tiles with tracking."""
+    import json
+    from pathlib import Path
+    from datetime import datetime
+
+    results_manifest = {
+        "model_registry_id": registry_id,
+        "inference_start": datetime.utcnow().isoformat(),
+        "tiles_processed": 0,
+        "tiles_failed": 0,
+    }
+
+    for tile_path in input_tiles:
+        try:
+            prediction = model.predict(tile_path)
+            save_prediction(prediction, output_dir / tile_path.stem)
+            results_manifest["tiles_processed"] += 1
+        except Exception as e:
+            log_failure(tile_path, e)
+            results_manifest["tiles_failed"] += 1
+
+    results_manifest["inference_end"] = datetime.utcnow().isoformat()
+
+    manifest_path = output_dir / "inference_manifest.json"
+    with open(manifest_path, 'w') as f:
+        json.dump(results_manifest, f, indent=2)
+
+    return results_manifest
+```
+
+### Real-Time Inference API
+
+For on-demand predictions:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: FastAPI inference endpoint pattern"
+
+from fastapi import FastAPI, HTTPException
+
+app = FastAPI(title="GeoAI Inference Service")
+
+@app.post("/predict")
+async def predict(request: dict):
+    """Run inference on a geospatial input."""
+    # Validate input
+    if not validate_input(request):
+        raise HTTPException(status_code=400, detail="Invalid input")
+
+    # Run inference
+    result = model.predict(request["data"])
+
+    # Log for monitoring
+    log_prediction(request, result)
+
+    return {"prediction": result, "model_version": MODEL_VERSION}
+
+@app.get("/health")
+async def health():
+    """Health check endpoint for monitoring."""
+    return {"status": "healthy", "model_version": MODEL_VERSION}
+```
+
+## Monitoring
+
+### What to Monitor
+
+| Metric | Why | Alert Threshold |
+|--------|-----|----------------|
+| **Prediction latency** | User experience and SLA compliance | > 2x baseline |
+| **Error rate** | Model or infrastructure failures | > 1% of requests |
+| **Data drift** | Input distribution shifting from training | Statistical test p < 0.05 |
+| **Prediction distribution** | Model behavior changing over time | Distribution shift detected |
+| **Resource utilization** | Cost and capacity planning | GPU > 80% sustained |
+
+## Incident Response
+
+If monitoring detects an anomaly, follow the shared [Incident Response procedure](appendix-procedures.qmd).
+
+Key actions:
+1. **Assess severity** — Is this affecting production outputs?
+2. **Contain** — Disable the endpoint if severity is critical
+3. **Investigate** — Check recent data inputs, model version, infrastructure changes
+4. **Remediate** — Fix and re-validate before re-enabling
+5. **Document** — Record everything for the governance board

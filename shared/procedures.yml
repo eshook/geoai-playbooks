@@ -1,0 +1,84 @@
+# =============================================================================
+# GeoAI Playbooks — Shared Procedures
+# =============================================================================
+# Cross-cutting procedures referenced by both playbooks. Each procedure has a
+# strategic summary (for decision makers) and operational steps (for developers).
+#
+# AGENT INSTRUCTIONS:
+#   - Each procedure must have a unique `id` (kebab-case).
+#   - Keep `strategic_summary` to 2-3 sentences.
+#   - `operational_steps` should be concrete and actionable.
+#   - Reference glossary terms using {{term:Term Name}} syntax.
+#   - Add new procedures at the end; do not reorder existing ones.
+# =============================================================================
+
+procedures:
+  - id: model-intake
+    title: "Model Intake & Registration"
+    strategic_summary: >
+      Every GeoAI model — whether built in-house, fine-tuned from a
+      {{term:Foundation Model}}, or procured from a vendor — must pass
+      through a formal intake process before use. This ensures visibility,
+      accountability, and alignment with the {{term:Acceptable Use Policy (AUP)}}.
+    operational_steps:
+      - "Open a Model Intake request in the project tracker."
+      - "Complete the {{term:Model Card}} template with all required fields."
+      - "Register the model version in the {{term:Model Registry}}."
+      - "Attach training and {{term:Validation Dataset}} references."
+      - "Submit for governance review (see procedure: governance-review)."
+
+  - id: governance-review
+    title: "Governance Review Gate"
+    strategic_summary: >
+      The governance review is the organizational checkpoint where leadership
+      evaluates a model's readiness for deployment. It covers risk, bias,
+      compliance, and alignment with mission objectives.
+    operational_steps:
+      - "Verify the {{term:Model Card}} is complete and current."
+      - "Confirm the {{term:Bias Audit}} has been run and results documented."
+      - "Check {{term:Data Provenance}} records for all training data."
+      - "Present findings to the governance board or designated reviewer."
+      - "Record the decision (approve / conditionally approve / reject) in the registry."
+
+  - id: data-acquisition
+    title: "Geospatial Data Acquisition & Cataloging"
+    strategic_summary: >
+      Acquiring geospatial data involves cost, licensing, and quality
+      trade-offs. This procedure ensures data purchases and downloads are
+      tracked, cataloged, and compliant with organizational policy.
+    operational_steps:
+      - "Identify the data need and required {{term:Spatial Resolution}}."
+      - "Search the internal data catalog for existing assets."
+      - "If new acquisition is needed, submit a data request with justification."
+      - "Upon receipt, validate data quality and completeness."
+      - "Record {{term:Data Provenance}} metadata in the catalog."
+      - "Tag data with applicable license and access restrictions."
+
+  - id: model-deployment
+    title: "Model Deployment to Production"
+    strategic_summary: >
+      Deploying a GeoAI model to production is a high-impact action that
+      requires passing the governance review, confirming infrastructure
+      readiness, and establishing monitoring.
+    operational_steps:
+      - "Confirm governance review status is 'approved' in the {{term:Model Registry}}."
+      - "Package the model with its inference dependencies."
+      - "Deploy to the approved environment (staging first, then production)."
+      - "Enable monitoring dashboards and alerting."
+      - "Run a smoke test with known inputs and compare to expected outputs."
+      - "Notify stakeholders and update the registry deployment status."
+
+  - id: incident-response
+    title: "GeoAI Incident Response"
+    strategic_summary: >
+      When a deployed GeoAI model produces harmful, inaccurate, or
+      unexpected outputs, the organization needs a clear response plan to
+      contain impact, investigate root causes, and restore trust.
+    operational_steps:
+      - "Detect the incident via monitoring, user report, or audit."
+      - "Classify severity (critical / high / medium / low)."
+      - "If critical or high: immediately disable the affected model endpoint."
+      - "Notify the governance board and affected stakeholders."
+      - "Investigate root cause (data drift, software bug, adversarial input)."
+      - "Document findings and corrective actions."
+      - "Re-run {{term:Bias Audit}} and validation before re-enabling."

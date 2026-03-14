@@ -1,0 +1,119 @@
+---
+title: "Data Engineering"
+---
+
+# Working with Organizational Data
+
+GeoAI models are built on geospatial data — satellite imagery, vector datasets, elevation models, and labeled training sets. This chapter covers how to acquire, process, and manage that data within your organization's framework.
+
+::: {.callout-tip}
+## Alignment Point
+Your organization's data strategy is defined in the [Decision Maker Playbook — Data Strategy](../decision-makers/data-strategy.qmd) chapter. The vendors, licensing, and resolution decisions made there constrain your pipelines.
+:::
+
+## Data Acquisition Workflow
+
+Follow the shared procedure for [Data Acquisition & Cataloging](appendix-procedures.qmd) every time you bring new data into the organization.
+
+### Accessing the Data Catalog
+
+Before acquiring new data, always check what already exists:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Querying a data catalog"
+
+# This is a pattern — adapt to your organization's catalog system
+import yaml
+
+def search_catalog(catalog_path, keyword):
+    """Search the organizational data catalog for existing assets."""
+    with open(catalog_path, 'r') as f:
+        catalog = yaml.safe_load(f)
+
+    results = []
+    for entry in catalog.get('datasets', []):
+        if keyword.lower() in entry.get('description', '').lower():
+            results.append(entry)
+    return results
+
+# Example usage
+matches = search_catalog('data/catalog.yml', 'building footprints')
+for m in matches:
+    print(f"  {m['name']} — {m['resolution']} — License: {m['license']}")
+```
+
+## Data Processing Patterns
+
+### Cloud-Optimized GeoTIFF (COG)
+
+Always convert raster data to COG format for efficient cloud access:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Converting to Cloud-Optimized GeoTIFF"
+
+import rasterio
+from rasterio.enums import Resampling
+
+def convert_to_cog(input_path, output_path):
+    """Convert a raster file to Cloud-Optimized GeoTIFF."""
+    with rasterio.open(input_path) as src:
+        profile = src.profile.copy()
+        profile.update(
+            driver='GTiff',
+            tiled=True,
+            compress='deflate',
+            blockxsize=512,
+            blockysize=512,
+        )
+
+        with rasterio.open(output_path, 'w', **profile) as dst:
+            for i in range(1, src.count + 1):
+                data = src.read(i)
+                dst.write(data, i)
+
+            dst.build_overviews([2, 4, 8, 16], Resampling.nearest)
+            dst.update_tags(ns='rio_overview', resampling='nearest')
+```
+
+### Data Provenance Tracking
+
+Record provenance for every dataset transformation:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Recording data provenance"
+
+import json
+from datetime import datetime
+
+def record_provenance(dataset_name, source, transformation, output_path):
+    """Record provenance metadata for a dataset transformation."""
+    provenance = {
+        "dataset": dataset_name,
+        "source": source,
+        "transformation": transformation,
+        "timestamp": datetime.utcnow().isoformat(),
+        "output": output_path,
+        "tool_versions": {
+            "rasterio": rasterio.__version__,
+            "python": "3.10+"
+        }
+    }
+
+    provenance_path = output_path + ".provenance.json"
+    with open(provenance_path, 'w') as f:
+        json.dump(provenance, f, indent=2)
+
+    return provenance_path
+```
+
+## Checklist: Data Readiness
+
+- [ ] Data source is in the organizational catalog
+- [ ] License and access restrictions are documented
+- [ ] Data is in cloud-optimized format
+- [ ] Provenance metadata is recorded
+- [ ] Quality checks have been run (completeness, spatial coverage, no-data values)
+- [ ] Data is versioned (DVC, git-lfs, or catalog versioning)

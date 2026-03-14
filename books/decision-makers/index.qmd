@@ -1,0 +1,35 @@
+---
+title: "GeoAI in a Meeting"
+subtitle: "A Playbook for Decision Makers"
+---
+
+# Welcome {.unnumbered}
+
+This playbook helps **organizational leaders, program managers, and decision makers** establish the strategy, governance, and culture needed to successfully adopt Geospatial AI (GeoAI).
+
+::: {.callout-note}
+## Companion Playbook
+This book is designed to be read alongside the [GeoAI in a Day — Developer Playbook](../developers/index.qmd). Strategic decisions you make here directly shape the guardrails and workflows developers follow every day.
+:::
+
+## Who This Book Is For
+
+- **Executives and senior leaders** setting organizational AI strategy
+- **Program and portfolio managers** overseeing GeoAI investments
+- **Policy and compliance officers** defining acceptable use and risk thresholds
+- **Technical directors** bridging strategy and implementation
+
+## How to Use This Playbook
+
+Each chapter addresses a strategic domain — from vision-setting to risk management to talent strategy. Within each chapter you will find:
+
+1. **Key Questions** — the decisions you need to make
+2. **Framework** — a structured approach to making those decisions
+3. **Alignment Points** — links to the corresponding Developer Playbook sections so you can see how your decisions translate into practice
+4. **Templates** — lightweight artifacts you can adapt for your organization
+
+## Guiding Principles
+
+1. **GeoAI is a team sport.** Success requires aligned efforts across leadership, data engineers, ML practitioners, and domain experts.
+2. **Governance enables speed.** Clear guardrails let developers move faster with confidence, not slower with bureaucracy.
+3. **Start with the mission.** Every GeoAI investment should trace back to a specific organizational mission or outcome.

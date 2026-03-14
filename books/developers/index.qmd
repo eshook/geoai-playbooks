@@ -1,0 +1,43 @@
+---
+title: "GeoAI in a Day"
+subtitle: "A Playbook for Developers"
+---
+
+# Welcome {.unnumbered}
+
+This playbook helps **GeoAI engineers, data engineers, and ML practitioners** navigate the day-to-day work of building and deploying geospatial AI at your organization. It is not a tutorial on _how to do GeoAI_ — it is a guide to _how we do GeoAI here_.
+
+::: {.callout-note}
+## Companion Playbook
+This book is designed to be read alongside the [GeoAI in a Meeting — Decision Maker Playbook](../decision-makers/index.qmd). The strategic decisions made there define the guardrails and priorities you follow in your daily work.
+:::
+
+## Who This Book Is For
+
+- **GeoAI / ML Engineers** building and training models
+- **Geospatial Data Engineers** building data pipelines
+- **Analysts** integrating GeoAI outputs into their workflows
+- **MLOps Engineers** deploying and monitoring models in production
+
+## How to Use This Playbook
+
+Each chapter addresses a stage of the GeoAI development lifecycle — from understanding organizational strategy to deploying and monitoring models. Within each chapter you will find:
+
+1. **Context** — how this stage connects to organizational strategy
+2. **Procedures** — step-by-step workflows aligned with governance requirements
+3. **Code Examples** — working snippets you can adapt (Python-focused)
+4. **Checklists** — items to verify before moving to the next stage
+
+## Your Daily Workflow at a Glance
+
+```{mermaid}
+flowchart LR
+    A[Understand Strategy] --> B[Acquire & Prepare Data]
+    B --> C[Develop & Train Model]
+    C --> D[Evaluate & Audit]
+    D --> E{Governance Review}
+    E -->|Approved| F[Deploy & Monitor]
+    E -->|Revise| C
+    F --> G[Iterate]
+    G --> B
+```

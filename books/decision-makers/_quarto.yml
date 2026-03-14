@@ -1,0 +1,40 @@
+project:
+  type: book
+  output-dir: ../../_book/decision-makers
+
+book:
+  title: "GeoAI in a Meeting"
+  subtitle: "A Playbook for Decision Makers"
+  author: "GeoAI Playbooks Project"
+  date: last-modified
+  reader-mode: true
+
+  chapters:
+    - index.qmd
+    - strategy.qmd
+    - governance.qmd
+    - data-strategy.qmd
+    - risk.qmd
+    - talent.qmd
+    - investment.qmd
+    - part: "Appendices"
+      chapters:
+        - appendix-glossary.qmd
+        - appendix-procedures.qmd
+
+  sidebar:
+    style: docked
+    search: true
+
+  page-footer:
+    left: |
+      GeoAI in a Meeting — Decision Maker Playbook
+    right: |
+      [Developer Playbook](../../books/developers/index.qmd)
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+    code-tools: false

@@ -1,0 +1,111 @@
+---
+title: "Model Lifecycle"
+---
+
+# Managing the GeoAI Model Lifecycle
+
+Every GeoAI model at your organization follows a defined lifecycle: intake, development, evaluation, governance review, deployment, monitoring, and eventual retirement.
+
+::: {.callout-tip}
+## Alignment Point
+The governance review gate is defined by leadership in the [Decision Maker Playbook — Governance](../decision-makers/governance.qmd) chapter. Understand those requirements before you begin model development.
+:::
+
+## Model Intake
+
+Before writing training code, complete the intake process (see shared procedure: model-intake).
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Model Card template as code"
+
+model_card = {
+    "model_name": "building-damage-assessment-v1",
+    "version": "1.0.0",
+    "description": "Classifies building damage from post-disaster satellite imagery",
+    "use_case": "Disaster response situational awareness",
+    "aup_reference": "AUP-2026-003",
+
+    "training_data": {
+        "source": "xBD dataset + organizational labeled data",
+        "resolution": "0.5m",
+        "geographic_coverage": "Global (training), Caribbean (fine-tuning)",
+        "version": "train-v2.1",
+    },
+
+    "architecture": "ResNet-50 with UNet decoder",
+    "framework": "PyTorch 2.x",
+
+    "performance": {
+        "overall_accuracy": None,  # Fill after evaluation
+        "f1_per_class": {},
+        "geographic_breakdown": {},
+    },
+
+    "limitations": [
+        "Performance degrades on imagery older than 2 years from training date",
+        "Not validated for non-optical (SAR) imagery",
+    ],
+
+    "intended_use": "Decision support — requires human review before action",
+    "prohibited_use": "Automated decisions without human oversight",
+}
+```
+
+## Development & Training
+
+### Experiment Tracking
+
+Track every experiment so results are reproducible and auditable:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: MLflow experiment tracking pattern"
+
+import mlflow
+
+def train_model(config):
+    """Train a GeoAI model with full experiment tracking."""
+    mlflow.set_experiment(config["experiment_name"])
+
+    with mlflow.start_run(run_name=config["run_name"]):
+        # Log parameters
+        mlflow.log_params(config["hyperparameters"])
+        mlflow.log_param("training_data_version", config["data_version"])
+
+        # ... training loop ...
+
+        # Log metrics
+        mlflow.log_metrics({
+            "val_accuracy": 0.0,    # Replace with actual
+            "val_f1_macro": 0.0,    # Replace with actual
+        })
+
+        # Log the model
+        mlflow.pytorch.log_model(model, "model")
+
+        # Log the model card
+        mlflow.log_artifact("model_card.json")
+```
+
+## Governance Review Gate
+
+Before requesting deployment, ensure you have:
+
+1. **Completed Model Card** with all performance fields filled
+2. **Bias Audit Results** (see [Responsible AI](responsible-ai.qmd))
+3. **Data Provenance** documentation for all training data
+4. **Validation Results** on held-out data, with geographic breakdowns
+5. **Approved Model Intake** in the project tracker
+
+Submit these artifacts to the Governance Board for review.
+
+## Checklist: Pre-Governance Submission
+
+- [ ] Model Card is complete and accurate
+- [ ] All experiments are tracked and reproducible
+- [ ] Bias audit has been run and results are documented
+- [ ] Validation dataset is independent of training data
+- [ ] Performance is reported with geographic and demographic breakdowns
+- [ ] Known limitations are clearly documented
+- [ ] Data provenance chain is complete

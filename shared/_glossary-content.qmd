@@ -1,0 +1,32 @@
+<!-- Auto-generated from shared/glossary.yml — Do not edit directly -->
+<!-- To update: edit shared/glossary.yml and regenerate, or edit here temporarily -->
+
+**Acceptable Use Policy (AUP)**
+: An organizational policy that defines approved and prohibited uses of GeoAI models, data, and outputs.
+
+**Bias Audit**
+: A structured review of a GeoAI model's predictions to identify systematic errors that disproportionately affect specific geographies, populations, or land-cover types.
+
+**Data Provenance**
+: The documented history of a dataset — its origin, transformations, and chain of custody.
+
+**Foundation Model**
+: A large pre-trained model (e.g., a geospatial vision transformer) that can be fine-tuned or prompted for specific GeoAI tasks.
+
+**Geospatial AI (GeoAI)**
+: The application of artificial intelligence — including machine learning, deep learning, and large language models — to geospatial data and workflows.
+
+**Model Card**
+: A standardized document that describes a model's purpose, training data, performance metrics, intended use, and known limitations.
+
+**Model Registry**
+: A centralized catalog where trained models, their versions, metadata, and deployment status are tracked.
+
+**Responsible AI (RAI)**
+: A framework of principles — fairness, transparency, accountability, privacy, and safety — guiding the ethical development and deployment of AI systems.
+
+**Spatial Resolution**
+: The size of the smallest ground feature that a sensor or model can distinguish, typically expressed in meters per pixel.
+
+**Validation Dataset**
+: A held-out dataset, independent of training data, used to measure how well a model performs on unseen examples.

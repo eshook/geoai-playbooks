@@ -1,0 +1,50 @@
+---
+title: "Chapter Title"
+---
+
+# Chapter Title
+
+<!--
+AGENT INSTRUCTIONS:
+1. Replace "Chapter Title" in both the YAML frontmatter and the heading.
+2. Write a 2-3 sentence introduction explaining what this chapter covers.
+3. Add an Alignment Point callout linking to the corresponding Decision Maker chapter.
+4. Update shared/cross-references.yml with the new mapping.
+5. Add this chapter to books/developers/_quarto.yml in the chapters list.
+-->
+
+::: {.callout-tip}
+## Alignment Point
+Leadership defines strategy for this area in [Decision Maker Chapter — Section](../decision-makers/CHAPTER.qmd).
+<!-- Replace CHAPTER with the actual decision maker chapter filename -->
+:::
+
+## Context
+
+<!-- How does this chapter connect to organizational strategy? -->
+
+## Procedures
+
+<!-- Step-by-step workflows aligned with governance requirements -->
+
+### Procedure Name
+
+1. Step one
+2. Step two
+3. Step three
+
+## Code Examples
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Description of what this code does"
+
+# Working code snippet that developers can adapt
+pass
+```
+
+## Checklist
+
+- [ ] Checklist item 1
+- [ ] Checklist item 2
+- [ ] Checklist item 3

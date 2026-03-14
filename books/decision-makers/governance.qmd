@@ -1,0 +1,68 @@
+---
+title: "Governance Framework"
+---
+
+# Governing GeoAI at Your Organization
+
+Governance is the connective tissue between strategic intent and operational execution. A well-designed governance framework gives developers clear gates to pass through while giving leadership confidence that models are safe, fair, and mission-aligned.
+
+::: {.callout-tip}
+## Alignment Point
+Developers navigate your governance framework in [Model Lifecycle — Governance Review Gate](../developers/model-lifecycle.qmd). The gates you define here become the checkpoints they must clear.
+:::
+
+## Key Questions
+
+1. Who has authority to approve a GeoAI model for production use?
+2. What evidence is required before a model can be deployed?
+3. How do we handle models that fail a governance review?
+4. How often should deployed models be re-reviewed?
+
+## Governance Structure
+
+### Roles
+
+| Role | Responsibility |
+|------|---------------|
+| **GeoAI Governance Board** | Approves/rejects models for production; sets policy |
+| **Model Owner** | Accountable for a model's lifecycle from intake to retirement |
+| **Technical Reviewer** | Evaluates model performance, bias audits, and data provenance |
+| **Risk Officer** | Assesses organizational and legal risk of deployment |
+
+### Review Gates
+
+```{mermaid}
+flowchart LR
+    A[Model Intake] --> B[Development & Testing]
+    B --> C{Governance Review}
+    C -->|Approved| D[Staging Deployment]
+    C -->|Rejected| E[Revise & Resubmit]
+    D --> F[Production Deployment]
+    F --> G[Ongoing Monitoring]
+    G -->|Trigger| C
+```
+
+### What the Governance Board Reviews
+
+1. **Model Card** — Is it complete and accurate?
+2. **Bias Audit Results** — Are there disproportionate errors across regions or populations?
+3. **Data Provenance** — Can we trace all training data to approved sources?
+4. **Acceptable Use Compliance** — Does the use case conform to the AUP?
+5. **Operational Readiness** — Is monitoring and incident response in place?
+
+## Creating Your Acceptable Use Policy
+
+Your Acceptable Use Policy (AUP) should address:
+
+- Approved use case categories (e.g., environmental monitoring: yes; individual surveillance: no)
+- Data sensitivity classifications that may be used with GeoAI
+- Geographic or jurisdictional restrictions
+- Requirements for human review of model outputs
+- Prohibitions (use cases the organization will never pursue)
+
+## Next Steps
+
+- [ ] Establish or designate a GeoAI Governance Board
+- [ ] Draft your Acceptable Use Policy
+- [ ] Define the minimum evidence package for governance review
+- [ ] Communicate governance gates to your development teams

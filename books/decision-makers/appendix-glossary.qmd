@@ -1,0 +1,9 @@
+---
+title: "Glossary"
+---
+
+# Shared Glossary
+
+This glossary is shared between the Decision Maker and Developer playbooks to ensure consistent terminology across the organization.
+
+{{< include ../../shared/_glossary-content.qmd >}}

@@ -1,0 +1,9 @@
+---
+title: "Shared Procedures"
+---
+
+# Organizational Procedures
+
+These procedures are shared between the Decision Maker and Developer playbooks. Each procedure includes both the strategic context (why it matters) and the operational steps (how to execute).
+
+{{< include ../../shared/_procedures-content.qmd >}}

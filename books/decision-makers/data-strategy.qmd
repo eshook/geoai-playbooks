@@ -1,0 +1,58 @@
+---
+title: "Data Strategy"
+---
+
+# Data Acquisition & Management
+
+GeoAI is only as good as the geospatial data that feeds it. Your data strategy determines what questions you can answer, how quickly you can answer them, and at what cost.
+
+::: {.callout-tip}
+## Alignment Point
+Developers implement your data strategy in [Data Engineering — Working with Organizational Data](../developers/data-engineering.qmd). Decisions you make about vendors, resolution, and licensing directly constrain their pipelines.
+:::
+
+## Key Questions
+
+1. What geospatial data do we already own or have access to?
+2. What gaps exist between our current data and our GeoAI ambitions?
+3. What is our budget for data acquisition?
+4. How do we catalog, version, and govern geospatial data?
+5. What are our data sharing and licensing constraints?
+
+## Data Inventory Checklist
+
+Before acquiring new data, understand what you have:
+
+- [ ] Satellite imagery (provider, resolution, revisit rate, archive depth)
+- [ ] Aerial / drone imagery
+- [ ] Vector datasets (boundaries, infrastructure, land use)
+- [ ] Elevation and terrain models (LiDAR, DEMs)
+- [ ] Weather and climate data
+- [ ] Labeled training datasets from past projects
+- [ ] Third-party / open-source datasets (OpenStreetMap, etc.)
+
+## Acquisition Decision Framework
+
+| Factor | Considerations |
+|--------|---------------|
+| **Resolution** | Higher resolution = higher cost but finer detail |
+| **Frequency** | How often do you need updated imagery? |
+| **Coverage** | Global vs. regional vs. site-specific |
+| **Licensing** | Can outputs derived from this data be shared? |
+| **Format** | Cloud-optimized formats reduce engineering overhead |
+| **Labeling** | Does the vendor provide labeled data or just raw imagery? |
+
+## Data Governance Principles
+
+1. **Catalog everything.** Every dataset gets an entry in the organizational catalog.
+2. **Track provenance.** Record where data came from and every transformation applied.
+3. **Control access.** Not all data should be available to all projects.
+4. **Version datasets.** Training data must be versioned alongside the models it produces.
+5. **Plan for retirement.** Data licenses expire; have a plan for when they do.
+
+## Next Steps
+
+- [ ] Conduct a geospatial data inventory
+- [ ] Identify critical data gaps for priority use cases
+- [ ] Establish a data cataloging standard
+- [ ] Define data acquisition approval workflow

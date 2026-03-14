@@ -1,0 +1,92 @@
+---
+title: "Responsible AI"
+---
+
+# Responsible AI in Practice
+
+Responsible AI is not a separate activity — it is woven into every stage of the GeoAI lifecycle. This chapter covers the practical implementation of your organization's RAI principles.
+
+::: {.callout-tip}
+## Alignment Point
+Risk tolerances and bias thresholds are set by leadership in the [Decision Maker Playbook — Risk Management](../decision-makers/risk.qmd) chapter. The thresholds defined there become your pass/fail criteria.
+:::
+
+## Bias Audits & Fairness Testing
+
+Every model must undergo a bias audit before governance review. The audit evaluates whether the model performs equitably across:
+
+- **Geographic strata** (urban vs. rural, different regions)
+- **Land cover types** (built-up, agricultural, forested, water)
+- **Temporal conditions** (seasons, time of day for optical imagery)
+- **Demographic contexts** (where applicable and measurable)
+
+### Running a Geographic Bias Audit
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Geographic stratified evaluation"
+
+import geopandas as gpd
+import pandas as pd
+
+def geographic_bias_audit(predictions_gdf, ground_truth_gdf, strata_column):
+    """
+    Evaluate model performance across geographic strata.
+
+    Parameters
+    ----------
+    predictions_gdf : GeoDataFrame with model predictions
+    ground_truth_gdf : GeoDataFrame with ground truth labels
+    strata_column : str, column name defining geographic strata
+
+    Returns
+    -------
+    pd.DataFrame with per-stratum metrics
+    """
+    joined = gpd.sjoin(predictions_gdf, ground_truth_gdf, how='inner')
+
+    results = []
+    for stratum, group in joined.groupby(strata_column):
+        accuracy = (group['predicted'] == group['actual']).mean()
+        count = len(group)
+        results.append({
+            'stratum': stratum,
+            'accuracy': accuracy,
+            'sample_count': count,
+        })
+
+    results_df = pd.DataFrame(results)
+
+    # Flag strata where performance is significantly below average
+    mean_accuracy = results_df['accuracy'].mean()
+    results_df['below_threshold'] = results_df['accuracy'] < (mean_accuracy - 0.05)
+
+    return results_df
+```
+
+## Transparency & Documentation
+
+For every model deployment, ensure:
+
+1. **Model Card** is published and accessible to stakeholders
+2. **Limitations** are clearly stated, not buried in footnotes
+3. **Confidence scores** are provided with predictions, not just labels
+4. **Human review requirements** are documented and enforced
+
+## Privacy Considerations for Geospatial Data
+
+High-resolution geospatial data can reveal sensitive information. Follow these guidelines:
+
+- Do not train models on imagery that could identify individuals without authorization
+- Apply appropriate resolution limits for public-facing outputs
+- Document any personal data that could be inferred from model outputs
+- Follow organizational data classification policies
+
+## Checklist: Responsible AI Review
+
+- [ ] Bias audit completed across all required strata
+- [ ] No stratum falls below the organizational performance threshold
+- [ ] Model card includes honest limitations section
+- [ ] Confidence scores are calibrated and meaningful
+- [ ] Privacy impact has been assessed
+- [ ] Human review requirements are defined for the deployment context

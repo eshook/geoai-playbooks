@@ -1,0 +1,53 @@
+# =============================================================================
+# GeoAI Playbooks — Cross-Reference Map
+# =============================================================================
+# Maps sections between the two playbooks so that strategic decisions and
+# operational guidance stay linked. When an agent adds content to one book,
+# it should check this map and update the corresponding section in the other.
+#
+# AGENT INSTRUCTIONS:
+#   - Each entry links a decision-maker chapter/section to a developer one.
+#   - Use the chapter filename (without .qmd) as the identifier.
+#   - Add new mappings when you create new chapters in either book.
+# =============================================================================
+
+mappings:
+  - decision_maker_chapter: "strategy"
+    decision_maker_section: "Defining Your GeoAI Vision"
+    developer_chapter: "getting-started"
+    developer_section: "Understanding Your Organization's GeoAI Strategy"
+    relationship: >
+      The strategic vision set by leadership directly informs the guardrails
+      and priorities that developers follow day-to-day.
+
+  - decision_maker_chapter: "governance"
+    decision_maker_section: "Governance Framework"
+    developer_chapter: "model-lifecycle"
+    developer_section: "Governance Review Gate"
+    relationship: >
+      The governance framework defines the review gates; developers must
+      navigate these gates for every model release.
+
+  - decision_maker_chapter: "data-strategy"
+    decision_maker_section: "Data Acquisition & Management"
+    developer_chapter: "data-engineering"
+    developer_section: "Working with Organizational Data"
+    relationship: >
+      Data strategy decisions (vendors, licensing, resolution) constrain
+      and enable the data engineering pipelines developers build.
+
+  - decision_maker_chapter: "risk"
+    decision_maker_section: "Risk Management"
+    developer_chapter: "responsible-ai"
+    developer_section: "Bias Audits & Fairness Testing"
+    relationship: >
+      Risk tolerances set by leadership translate into specific bias audit
+      thresholds and testing requirements for developers.
+
+  - decision_maker_chapter: "talent"
+    decision_maker_section: "Building GeoAI Teams"
+    developer_chapter: "getting-started"
+    developer_section: "Your Role in the GeoAI Team"
+    relationship: >
+      Team structure and role definitions from leadership help developers
+      understand their responsibilities and escalation paths.

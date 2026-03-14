@@ -1,0 +1,50 @@
+# Quarto build output
+_book/
+_freeze/
+.quarto/
+*_files/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.env
+*.egg-info/
+
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Rproj
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data artifacts (keep small examples only)
+data/scratch/
+*.parquet
+*.gpkg
+*.tif
+*.tiff
+*.shp
+*.dbf
+*.shx
+*.prj
+
+# Secrets
+.env
+.env.*
+credentials/

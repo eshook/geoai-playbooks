@@ -1,0 +1,74 @@
+<!-- Auto-generated from shared/procedures.yml — Do not edit directly -->
+<!-- To update: edit shared/procedures.yml and regenerate, or edit here temporarily -->
+
+## Model Intake & Registration
+
+**Strategic Summary:** Every GeoAI model — whether built in-house, fine-tuned from a Foundation Model, or procured from a vendor — must pass through a formal intake process before use. This ensures visibility, accountability, and alignment with the Acceptable Use Policy (AUP).
+
+**Operational Steps:**
+
+1. Open a Model Intake request in the project tracker.
+2. Complete the Model Card template with all required fields.
+3. Register the model version in the Model Registry.
+4. Attach training and Validation Dataset references.
+5. Submit for governance review (see: Governance Review Gate below).
+
+---
+
+## Governance Review Gate
+
+**Strategic Summary:** The governance review is the organizational checkpoint where leadership evaluates a model's readiness for deployment. It covers risk, bias, compliance, and alignment with mission objectives.
+
+**Operational Steps:**
+
+1. Verify the Model Card is complete and current.
+2. Confirm the Bias Audit has been run and results documented.
+3. Check Data Provenance records for all training data.
+4. Present findings to the governance board or designated reviewer.
+5. Record the decision (approve / conditionally approve / reject) in the registry.
+
+---
+
+## Geospatial Data Acquisition & Cataloging
+
+**Strategic Summary:** Acquiring geospatial data involves cost, licensing, and quality trade-offs. This procedure ensures data purchases and downloads are tracked, cataloged, and compliant with organizational policy.
+
+**Operational Steps:**
+
+1. Identify the data need and required Spatial Resolution.
+2. Search the internal data catalog for existing assets.
+3. If new acquisition is needed, submit a data request with justification.
+4. Upon receipt, validate data quality and completeness.
+5. Record Data Provenance metadata in the catalog.
+6. Tag data with applicable license and access restrictions.
+
+---
+
+## Model Deployment to Production
+
+**Strategic Summary:** Deploying a GeoAI model to production is a high-impact action that requires passing the governance review, confirming infrastructure readiness, and establishing monitoring.
+
+**Operational Steps:**
+
+1. Confirm governance review status is 'approved' in the Model Registry.
+2. Package the model with its inference dependencies.
+3. Deploy to the approved environment (staging first, then production).
+4. Enable monitoring dashboards and alerting.
+5. Run a smoke test with known inputs and compare to expected outputs.
+6. Notify stakeholders and update the registry deployment status.
+
+---
+
+## GeoAI Incident Response
+
+**Strategic Summary:** When a deployed GeoAI model produces harmful, inaccurate, or unexpected outputs, the organization needs a clear response plan to contain impact, investigate root causes, and restore trust.
+
+**Operational Steps:**
+
+1. Detect the incident via monitoring, user report, or audit.
+2. Classify severity (critical / high / medium / low).
+3. If critical or high: immediately disable the affected model endpoint.
+4. Notify the governance board and affected stakeholders.
+5. Investigate root cause (data drift, software bug, adversarial input).
+6. Document findings and corrective actions.
+7. Re-run Bias Audit and validation before re-enabling.

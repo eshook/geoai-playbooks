@@ -1,0 +1,132 @@
+# =============================================================================
+# GeoAI Playbooks — Shared Glossary
+# =============================================================================
+# This glossary is the single source of truth for terminology used across both
+# the Decision Maker and Developer playbooks. Both books include this file so
+# that vocabulary stays aligned.
+#
+# FORMAT:
+#   - term: "Term Name"
+#     definition: "Plain-language definition."
+#     context_decision_maker: "Why this matters for strategic decisions."
+#     context_developer: "How this shows up in day-to-day dev work."
+#
+# AGENT INSTRUCTIONS:
+#   - Add new terms in alphabetical order.
+#   - Always fill in BOTH context fields so the two books stay aligned.
+#   - Keep definitions jargon-free; link to deeper content in the books.
+# =============================================================================
+
+terms:
+  - term: "Acceptable Use Policy (AUP)"
+    definition: >
+      An organizational policy that defines approved and prohibited uses of
+      GeoAI models, data, and outputs.
+    context_decision_maker: >
+      Decision makers own the AUP and must ensure it reflects organizational
+      risk tolerance, legal requirements, and ethical standards.
+    context_developer: >
+      Developers must verify that every model deployment conforms to the AUP
+      before moving to production.
+
+  - term: "Bias Audit"
+    definition: >
+      A structured review of a GeoAI model's predictions to identify
+      systematic errors that disproportionately affect specific geographies,
+      populations, or land-cover types.
+    context_decision_maker: >
+      Bias audits are a governance checkpoint; results feed into risk
+      registers and go/no-go decisions.
+    context_developer: >
+      Developers run bias audits as part of the model-evaluation pipeline,
+      producing metrics and visualizations for review.
+
+  - term: "Data Provenance"
+    definition: >
+      The documented history of a dataset — its origin, transformations,
+      and chain of custody.
+    context_decision_maker: >
+      Provenance documentation supports regulatory compliance and
+      organizational accountability.
+    context_developer: >
+      Developers record provenance metadata at each processing step using
+      the organization's lineage tooling.
+
+  - term: "Foundation Model"
+    definition: >
+      A large pre-trained model (e.g., a geospatial vision transformer)
+      that can be fine-tuned or prompted for specific GeoAI tasks.
+    context_decision_maker: >
+      Selecting or licensing a foundation model is a strategic investment
+      decision with long-term vendor and capability implications.
+    context_developer: >
+      Developers fine-tune or adapt foundation models to organizational
+      data, following approved model-management procedures.
+
+  - term: "Geospatial AI (GeoAI)"
+    definition: >
+      The application of artificial intelligence — including machine
+      learning, deep learning, and large language models — to geospatial
+      data and workflows.
+    context_decision_maker: >
+      GeoAI is the overarching capability area; strategic plans should
+      define where and why the organization invests in it.
+    context_developer: >
+      GeoAI is the technical discipline developers practice daily,
+      combining geospatial data engineering with AI/ML methods.
+
+  - term: "Model Card"
+    definition: >
+      A standardized document that describes a model's purpose, training
+      data, performance metrics, intended use, and known limitations.
+    context_decision_maker: >
+      Model cards provide the summary information needed for governance
+      reviews and stakeholder communication.
+    context_developer: >
+      Developers author and maintain model cards as part of the model
+      release checklist.
+
+  - term: "Model Registry"
+    definition: >
+      A centralized catalog where trained models, their versions, metadata,
+      and deployment status are tracked.
+    context_decision_maker: >
+      The model registry gives leadership visibility into what models exist,
+      where they are deployed, and their approval status.
+    context_developer: >
+      Developers register every model version in the registry before
+      requesting a deployment review.
+
+  - term: "Responsible AI (RAI)"
+    definition: >
+      A framework of principles — fairness, transparency, accountability,
+      privacy, and safety — guiding the ethical development and deployment
+      of AI systems.
+    context_decision_maker: >
+      RAI principles shape organizational policy, procurement criteria,
+      and public communications about AI use.
+    context_developer: >
+      RAI principles translate into concrete checklists, tests, and review
+      gates that developers follow in every project.
+
+  - term: "Spatial Resolution"
+    definition: >
+      The size of the smallest ground feature that a sensor or model can
+      distinguish, typically expressed in meters per pixel.
+    context_decision_maker: >
+      Resolution choices drive data-acquisition costs and determine what
+      questions the organization can answer with GeoAI.
+    context_developer: >
+      Developers select, resample, and validate data at resolutions
+      appropriate for the use case and model architecture.
+
+  - term: "Validation Dataset"
+    definition: >
+      A held-out dataset, independent of training data, used to measure
+      how well a model performs on unseen examples.
+    context_decision_maker: >
+      Validation results are the primary evidence used in go/no-go
+      decisions for model deployment.
+    context_developer: >
+      Developers curate, version, and protect validation datasets to
+      ensure evaluation integrity.

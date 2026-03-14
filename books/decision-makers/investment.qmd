@@ -1,0 +1,51 @@
+---
+title: "Investment & Roadmap"
+---
+
+# Planning GeoAI Investments
+
+GeoAI programs require sustained investment across data, compute, talent, and tooling. This chapter helps you think about phased investment and building a roadmap.
+
+## Key Questions
+
+1. What is the total cost profile for our GeoAI ambitions?
+2. How do we phase investment to deliver value incrementally?
+3. What infrastructure do we need (cloud compute, GPUs, storage)?
+4. How do we measure return on investment for GeoAI?
+
+## Investment Categories
+
+| Category | Examples | Cost Drivers |
+|----------|----------|-------------|
+| **Data** | Imagery subscriptions, labeling services | Resolution, coverage, frequency |
+| **Compute** | Cloud GPU instances, training clusters | Model size, experiment volume |
+| **Talent** | Hiring, training, contractors | Market rates, retention |
+| **Tooling** | MLOps platforms, annotation tools | Build vs. buy decisions |
+| **Governance** | Audit processes, compliance tooling | Regulatory requirements |
+
+## Phased Roadmap Template
+
+### Phase 1: Foundation (Months 1-6)
+- Establish governance framework
+- Conduct data inventory
+- Hire or designate core team
+- Complete 1-2 proof-of-concept projects
+
+### Phase 2: Scale (Months 7-18)
+- Deploy first production model(s)
+- Build reusable data pipelines
+- Establish model registry and MLOps practices
+- Expand team and training
+
+### Phase 3: Optimize (Months 18+)
+- Optimize model performance and cost
+- Expand to additional use cases
+- Build self-service capabilities for analysts
+- Contribute to organizational knowledge base
+
+## Next Steps
+
+- [ ] Estimate costs for Phase 1 use cases
+- [ ] Build a business case linking GeoAI investment to mission outcomes
+- [ ] Identify quick wins that demonstrate value early
+- [ ] Establish KPIs for measuring GeoAI program success

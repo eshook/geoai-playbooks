@@ -1,0 +1,63 @@
+---
+title: "Tooling & Infrastructure"
+---
+
+# GeoAI Tooling and Infrastructure
+
+This chapter provides guidance on the tools, libraries, and infrastructure patterns used for GeoAI development at your organization. Adapt these recommendations to your approved technology stack.
+
+## Recommended Python Stack
+
+| Category | Tools | Notes |
+|----------|-------|-------|
+| **Geospatial I/O** | `rasterio`, `fiona`, `geopandas` | Core geospatial data reading/writing |
+| **Geometry** | `shapely`, `pyproj` | Geometric operations and projections |
+| **ML Frameworks** | `pytorch`, `tensorflow` | Choose based on organizational standard |
+| **Geospatial ML** | `torchgeo`, `rastervision` | Geospatial-specific ML utilities |
+| **Experiment Tracking** | `mlflow`, `wandb` | Track experiments and models |
+| **Data Versioning** | `dvc` | Version large datasets |
+| **Visualization** | `folium`, `matplotlib`, `leafmap` | Maps and charts |
+| **API Serving** | `fastapi`, `bentoml` | Model inference endpoints |
+
+## Cloud Infrastructure Patterns
+
+### Data Lake Layout
+
+```
+s3://org-geoai-data/
+├── raw/                    # Original data, immutable
+│   ├── satellite/
+│   ├── vector/
+│   └── labels/
+├── processed/              # Transformed, analysis-ready
+│   ├── cog/                # Cloud-Optimized GeoTIFFs
+│   ├── tiles/              # Pre-tiled training chips
+│   └── features/           # Extracted feature datasets
+├── models/                 # Trained model artifacts
+│   └── {model-name}/{version}/
+└── outputs/                # Inference results
+    └── {model-name}/{run-id}/
+```
+
+### GPU Compute
+
+For model training, use the organizational approved compute environment. Common patterns:
+
+- **Managed notebooks** for exploration (SageMaker, Vertex AI, Databricks)
+- **Batch training jobs** for reproducible experiments
+- **Kubernetes GPU nodes** for custom workloads
+
+## Version Control Practices
+
+- One repository per model or tightly-coupled model family
+- Use DVC for large files (imagery, model weights)
+- Tag model releases with semantic versioning
+- Keep notebooks clean — restart-and-run-all before committing
+
+## Checklist: Infrastructure Readiness
+
+- [ ] Development environment matches production runtime
+- [ ] Data storage follows the organizational lake layout
+- [ ] GPU compute is provisioned for training workloads
+- [ ] Experiment tracking system is configured
+- [ ] CI/CD pipeline runs model tests on every commit

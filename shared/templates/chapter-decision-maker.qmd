@@ -1,0 +1,45 @@
+---
+title: "Chapter Title"
+---
+
+# Chapter Title
+
+<!--
+AGENT INSTRUCTIONS:
+1. Replace "Chapter Title" in both the YAML frontmatter and the heading.
+2. Write a 2-3 sentence introduction explaining what strategic domain this covers.
+3. Add an Alignment Point callout linking to the corresponding Developer chapter.
+4. Update shared/cross-references.yml with the new mapping.
+5. Add this chapter to books/decision-makers/_quarto.yml in the chapters list.
+-->
+
+::: {.callout-tip}
+## Alignment Point
+Developers implement this in [Developer Chapter — Section](../developers/CHAPTER.qmd).
+<!-- Replace CHAPTER with the actual developer chapter filename -->
+:::
+
+## Key Questions
+
+1. <!-- Strategic question for leadership -->
+2. <!-- Strategic question for leadership -->
+3. <!-- Strategic question for leadership -->
+
+## Framework
+
+<!-- Provide a structured approach to making decisions in this domain -->
+
+| Component | Description |
+|-----------|-------------|
+| **Item 1** | Description |
+| **Item 2** | Description |
+
+## Organizational Considerations
+
+<!-- What should the organization consider when making decisions here? -->
+
+## Next Steps
+
+- [ ] Action item 1
+- [ ] Action item 2
+- [ ] Action item 3

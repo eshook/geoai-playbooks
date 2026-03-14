@@ -1,0 +1,41 @@
+project:
+  type: book
+  output-dir: ../../_book/developers
+
+book:
+  title: "GeoAI in a Day"
+  subtitle: "A Playbook for Developers"
+  author: "GeoAI Playbooks Project"
+  date: last-modified
+  reader-mode: true
+
+  chapters:
+    - index.qmd
+    - getting-started.qmd
+    - data-engineering.qmd
+    - model-lifecycle.qmd
+    - deployment.qmd
+    - responsible-ai.qmd
+    - tooling.qmd
+    - part: "Appendices"
+      chapters:
+        - appendix-glossary.qmd
+        - appendix-procedures.qmd
+
+  sidebar:
+    style: docked
+    search: true
+
+  page-footer:
+    left: |
+      GeoAI in a Day — Developer Playbook
+    right: |
+      [Decision Maker Playbook](../../books/decision-makers/index.qmd)
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+    code-fold: true
+    code-tools: true

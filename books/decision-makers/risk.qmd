@@ -1,0 +1,48 @@
+---
+title: "Risk Management"
+---
+
+# Managing GeoAI Risk
+
+GeoAI introduces specific risks that traditional IT risk frameworks may not fully cover — from biased land-use classifications to adversarial manipulation of satellite imagery inputs.
+
+::: {.callout-tip}
+## Alignment Point
+Developers implement risk mitigations in [Responsible AI — Bias Audits & Fairness Testing](../developers/responsible-ai.qmd). The risk tolerances you set here become their testing thresholds.
+:::
+
+## Key Questions
+
+1. What are the highest-impact failure modes for our GeoAI models?
+2. What populations or geographies could be disproportionately harmed?
+3. What is our tolerance for false positives vs. false negatives?
+4. How quickly can we disable a model that is producing harmful outputs?
+5. What are our legal and regulatory obligations?
+
+## GeoAI Risk Categories
+
+| Category | Example Risk | Mitigation Strategy |
+|----------|-------------|-------------------|
+| **Accuracy** | Model misclassifies flood zones | Validation against ground truth |
+| **Bias** | Model performs worse in rural areas | Geographic stratified evaluation |
+| **Privacy** | High-res imagery reveals personal information | Resolution limits + access controls |
+| **Security** | Adversarial inputs fool the model | Input validation + anomaly detection |
+| **Dependency** | Vendor discontinues data source | Multi-vendor strategy |
+| **Regulatory** | Model outputs violate export controls | Legal review in governance gate |
+
+## Setting Risk Thresholds
+
+For each deployed model, define:
+
+1. **Performance floor** — minimum acceptable accuracy on the validation dataset
+2. **Bias ceiling** — maximum acceptable disparity across geographic strata
+3. **Latency requirement** — maximum time from input to output
+4. **Availability target** — uptime SLA for production endpoints
+5. **Incident response SLA** — maximum time to disable a failing model
+
+## Next Steps
+
+- [ ] Catalog GeoAI-specific risks for your organization
+- [ ] Define risk thresholds for pilot use cases
+- [ ] Integrate GeoAI risk into your existing risk register
+- [ ] Establish incident response procedures (see shared procedure: incident-response)
