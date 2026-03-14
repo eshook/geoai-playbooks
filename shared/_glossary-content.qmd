@@ -1,5 +1,5 @@
-<!-- Auto-generated from shared/glossary.yml — Do not edit directly -->
-<!-- To update: edit shared/glossary.yml and regenerate, or edit here temporarily -->
+<!-- Generated from shared/glossary.yml by scripts/generate-shared-content.py -->
+<!-- DO NOT EDIT — edit glossary.yml and re-run the generator -->
 
 **Acceptable Use Policy (AUP)**
 : An organizational policy that defines approved and prohibited uses of GeoAI models, data, and outputs.
@@ -30,3 +30,4 @@
 
 **Validation Dataset**
 : A held-out dataset, independent of training data, used to measure how well a model performs on unseen examples.
+

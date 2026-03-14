@@ -16,27 +16,58 @@ geoai-playbooks/
 │   ├── decision-makers/     # Decision Maker playbook (Quarto book)
 │   │   ├── _quarto.yml      # Book configuration
 │   │   ├── index.qmd        # Book landing page
-│   │   └── *.qmd            # Chapters
+│   │   └── *.qmd            # Chapters (thin wrappers that include shared content or contain book-specific content)
 │   └── developers/          # Developer playbook (Quarto book)
 │       ├── _quarto.yml      # Book configuration
 │       ├── index.qmd        # Book landing page
 │       └── *.qmd            # Chapters
 ├── shared/
-│   ├── glossary.yml         # Single source of truth for terminology
-│   ├── procedures.yml       # Shared procedures (strategic + operational)
-│   ├── cross-references.yml # Maps chapters between the two books
-│   ├── _glossary-content.qmd   # Includable glossary (Quarto include)
-│   ├── _procedures-content.qmd # Includable procedures (Quarto include)
-│   └── templates/           # Chapter templates for new content
-├── .github/
-│   └── workflows/
-│       └── publish.yml      # CI: build + deploy to GitHub Pages
+│   ├── glossary.yml              # SOURCE OF TRUTH: terminology
+│   ├── procedures.yml            # SOURCE OF TRUTH: procedures
+│   ├── cross-references.yml      # Maps chapters between books
+│   ├── _brainstorming-content.qmd  # Shared content (included by both books)
+│   ├── _glossary-content.qmd       # GENERATED — do not edit (from glossary.yml)
+│   ├── _procedures-content.qmd     # GENERATED — do not edit (from procedures.yml)
+│   └── templates/                   # Chapter templates for new content
+├── .github/workflows/
+│   └── publish.yml          # CI: generate → validate → build → deploy
 ├── scripts/
-│   ├── build.sh             # Build both books locally
-│   └── validate.sh          # Validate structure and cross-references
+│   ├── build.sh                    # Full local build (generate + validate + render)
+│   ├── validate.sh                 # Validate structure, sync, includes, cross-refs
+│   └── generate-shared-content.py  # Generate .qmd files from YAML sources
 ├── index.html               # Landing page for GitHub Pages
 └── _book/                   # Build output (gitignored)
 ```
+
+## How Shared Content Works
+
+There are two patterns for shared content. Know which one you're using:
+
+### Pattern 1: YAML → Generated QMD (glossary, procedures)
+
+```
+glossary.yml  ──[generate-shared-content.py]──►  _glossary-content.qmd
+                                                       ▲
+                                                       │ {{< include >}}
+                                            appendix-glossary.qmd (both books)
+```
+
+- **Edit the `.yml` file** (the source of truth)
+- **Run `python scripts/generate-shared-content.py`** to regenerate the `.qmd`
+- **Never edit `_glossary-content.qmd` or `_procedures-content.qmd` directly** — they will be overwritten
+- CI runs the generator automatically before every build
+
+### Pattern 2: Shared QMD Include (brainstorming)
+
+```
+shared/_brainstorming-content.qmd
+       ▲
+       │ {{< include >}}
+brainstorming.qmd (both books — thin wrappers with only YAML frontmatter)
+```
+
+- **Edit `shared/_brainstorming-content.qmd`** directly
+- The book-level `brainstorming.qmd` files are just wrappers — don't add content to them
 
 ## Brainstorming Guide
 
@@ -62,9 +93,9 @@ The 12 brainstorming domains are:
 
 2. **Update cross-references.** When adding chapters, update `shared/cross-references.yml` with the mapping between the two books.
 
-3. **Use shared glossary.** New terms must go in `shared/glossary.yml` with BOTH `context_decision_maker` and `context_developer` fields. Then update `shared/_glossary-content.qmd`.
+3. **Use shared glossary.** New terms go in `shared/glossary.yml` with BOTH `context_decision_maker` and `context_developer` fields. Then run `python scripts/generate-shared-content.py` to regenerate the `.qmd`.
 
-4. **Use shared procedures.** Cross-cutting procedures go in `shared/procedures.yml` with both `strategic_summary` and `operational_steps`. Then update `shared/_procedures-content.qmd`.
+4. **Use shared procedures.** Cross-cutting procedures go in `shared/procedures.yml` with both `strategic_summary` and `operational_steps`. Then run `python scripts/generate-shared-content.py`.
 
 5. **Use templates.** When creating new chapters, start from `shared/templates/chapter-decision-maker.qmd` or `shared/templates/chapter-developer.qmd`.
 
@@ -75,13 +106,16 @@ The 12 brainstorming domains are:
 ## Build Commands
 
 ```bash
-# Build both books locally
+# Full build (generate shared content → validate → render both books)
 bash scripts/build.sh
 
-# Validate structure
+# Just validate (no build)
 bash scripts/validate.sh
 
-# Build a single book locally
+# Just regenerate shared .qmd files from YAML
+python scripts/generate-shared-content.py
+
+# Build a single book (after generating shared content)
 cd books/decision-makers && quarto render
 cd books/developers && quarto render
 ```
@@ -90,19 +124,31 @@ cd books/developers && quarto render
 
 The repository uses GitHub Actions (`.github/workflows/publish.yml`) to automatically:
 
-1. Build both Quarto books on every push to `main` or `claude/**` branches
-2. Deploy the combined output to GitHub Pages
+1. Generate shared `.qmd` content from YAML sources
+2. Validate structure, sync, and cross-references
+3. Build both Quarto books
+4. Deploy the combined output to GitHub Pages
 
 The deployed site includes a landing page (`index.html`) linking to both books. **You do not need to build locally** — just push your changes and the CI pipeline handles the rest.
 
 If you modify the site structure (e.g., add a third book), update the workflow's "Assemble site" step and the `index.html` landing page accordingly.
+
+## What the Validator Checks
+
+`scripts/validate.sh` catches:
+- Missing required files
+- Chapters listed in `_quarto.yml` that don't exist as files
+- Cross-reference entries that point to nonexistent chapters
+- Glossary terms in YAML that are missing from the generated `.qmd`
+- Procedure titles in YAML that are missing from the generated `.qmd`
+- Broken `{{< include >}}` paths in chapter files
 
 ## Content Conventions
 
 - **Decision Maker chapters** focus on: Key Questions, Frameworks, Organizational Considerations, Next Steps
 - **Developer chapters** focus on: Context (link to strategy), Procedures, Code Examples, Checklists
 - Code examples use Python with `#| eval: false` (not executed during build)
-- Use Mermaid diagrams for workflows: ````{mermaid}` blocks
+- Use Mermaid diagrams for workflows: `` `{mermaid}` `` blocks
 - Use Quarto callouts for alignment points: `::: {.callout-tip}`
 
 ## Adding a New Topic (Step-by-Step)
@@ -112,6 +158,7 @@ If you modify the site structure (e.g., add a third book), update the workflow's
 3. Create the counterpart `.qmd` in the other book directory
 4. Add both files to their respective `_quarto.yml` chapter lists
 5. Add a mapping to `shared/cross-references.yml`
-6. Add any new terms to `shared/glossary.yml` and update `_glossary-content.qmd`
-7. Add any new procedures to `shared/procedures.yml` and update `_procedures-content.qmd`
-8. Run `bash scripts/validate.sh` to check your work
+6. Add any new terms to `shared/glossary.yml`
+7. Add any new procedures to `shared/procedures.yml`
+8. Run `python scripts/generate-shared-content.py` to regenerate `.qmd` files
+9. Run `bash scripts/validate.sh` to check your work
