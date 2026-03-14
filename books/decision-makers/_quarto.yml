@@ -11,6 +11,7 @@ book:
 
   chapters:
     - index.qmd
+    - brainstorming.qmd
     - strategy.qmd
     - governance.qmd
     - data-strategy.qmd

@@ -7,6 +7,8 @@ Two aligned Quarto books for adopting Geospatial AI (GeoAI) at your organization
 | **GeoAI in a Meeting** | Decision Makers | Strategy, governance, risk, talent, investment |
 | **GeoAI in a Day** | Developers | Data engineering, model lifecycle, deployment, responsible AI |
 
+Both books open with a shared **Organizational Brainstorming & Planning Guide** — a comprehensive set of 150+ questions organized across 12 domains (from "Why GeoAI?" to "What's coming next?") that surface the issues organizations need to think through before populating the playbooks. Each question is framed from two perspectives: the **Boardroom** (CXO-level strategic concerns) and the **Bullpen** (developer/data-scientist operational realities).
+
 The two books share a common glossary, procedures, and cross-references so that strategic decisions made by leadership are directly visible in the operational guidance developers follow.
 
 ## Quick Start
@@ -44,6 +46,7 @@ geoai-playbooks/
 │   ├── decision-makers/        # "GeoAI in a Meeting" playbook
 │   │   ├── _quarto.yml
 │   │   ├── index.qmd
+│   │   ├── brainstorming.qmd   # Shared pre-chapter (150+ planning questions)
 │   │   ├── strategy.qmd
 │   │   ├── governance.qmd
 │   │   ├── data-strategy.qmd
@@ -53,6 +56,7 @@ geoai-playbooks/
 │   └── developers/             # "GeoAI in a Day" playbook
 │       ├── _quarto.yml
 │       ├── index.qmd
+│       ├── brainstorming.qmd   # Shared pre-chapter (150+ planning questions)
 │       ├── getting-started.qmd
 │       ├── data-engineering.qmd
 │       ├── model-lifecycle.qmd
@@ -78,6 +82,9 @@ geoai-playbooks/
 ```
 Decision Maker Playbook              Developer Playbook
 ========================              ==================
+Brainstorming Guide        ◄──────►   Brainstorming Guide
+(shared pre-chapter)                  (shared pre-chapter)
+
 Strategy & Vision          ───────►   Getting Started
                                       (understand org strategy)
 
@@ -120,6 +127,8 @@ Maps each decision-maker chapter to its developer counterpart with a description
 See [CLAUDE.md](CLAUDE.md) for detailed development guidance. Here is a summary:
 
 ### Expanding Content
+
+0. **Use the Brainstorming Guide as a roadmap.** The 150+ questions in `brainstorming.qmd` are organized into 12 domains. Each question is a potential section or subsection in the playbooks. AI agents should use these questions to drive content generation — pick a question, research it, and write the corresponding guidance in the appropriate chapter.
 
 1. **Add depth to existing chapters.** Current chapters are frameworks with example content. Flesh out each section with organization-specific detail, more code examples, and real-world scenarios.
 

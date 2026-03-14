@@ -34,6 +34,24 @@ geoai-playbooks/
 └── _book/                   # Build output (gitignored)
 ```
 
+## Brainstorming Guide
+
+Both books include `brainstorming.qmd` as a shared pre-chapter with 150+ organizational planning questions across 12 domains. Each question is framed from two perspectives: **Boardroom** (strategic) and **Bullpen** (operational). Use these questions as a roadmap for content generation — each question can drive a section or subsection in the main chapters.
+
+The 12 brainstorming domains are:
+1. Why GeoAI, Why Now, Why Us?
+2. Organizational Identity and GeoAI Ambition
+3. Data: The Foundation of Everything
+4. Models: Build, Buy, Fine-Tune, or Prompt?
+5. Governance and Guardrails
+6. Responsible AI: Ethics in the Geospatial Context
+7. Talent, Culture, and Organizational Change
+8. Infrastructure, Compute, and Cloud
+9. Partnerships, Procurement, and the Vendor Landscape
+10. Risk, Failure, and Incident Planning
+11. Measuring Success and Communicating Value
+12. The Horizon: What is Coming Next?
+
 ## Key Rules for Editing
 
 1. **Always keep both books aligned.** If you add a chapter to one book that has a strategic/operational counterpart, add the corresponding chapter to the other book.

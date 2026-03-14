@@ -12,6 +12,16 @@
 # =============================================================================
 
 mappings:
+  - decision_maker_chapter: "brainstorming"
+    decision_maker_section: "Organizational Brainstorming & Planning Guide"
+    developer_chapter: "brainstorming"
+    developer_section: "Organizational Brainstorming & Planning Guide"
+    relationship: >
+      This is a shared pre-chapter that appears identically in both books.
+      It raises questions from both the boardroom and the bullpen to
+      facilitate cross-functional planning workshops before populating
+      the rest of the playbooks.
+
   - decision_maker_chapter: "strategy"
     decision_maker_section: "Defining Your GeoAI Vision"
     developer_chapter: "getting-started"

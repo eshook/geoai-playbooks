@@ -1,0 +1,362 @@
+---
+title: "Organizational Brainstorming & Planning Guide"
+---
+
+# Before You Begin: The Questions That Matter {.unnumbered}
+
+Before writing strategy documents or standing up infrastructure, your organization needs an honest conversation — across the boardroom and the bullpen — about what GeoAI means for you. This chapter raises the questions. The rest of both playbooks help you find the answers.
+
+::: {.callout-note}
+## Shared Pre-Chapter
+This brainstorming guide appears in both the Decision Maker and Developer playbooks. It is intentionally shared because the best GeoAI programs start with leadership and practitioners thinking through the same issues — from different angles — together. Questions marked with **Boardroom** surface strategic and organizational concerns. Questions marked with **Bullpen** surface technical and operational realities. Both sides need to hear both sides.
+:::
+
+::: {.callout-tip}
+## How to Use This Chapter
+Use this as a **workshop guide**. Gather your leadership team and your technical leads in the same room (or the same thread). Work through each section. Don't try to answer everything — flag the questions that are most urgent or most contested for your organization, and let those drive the order in which you read the rest of this playbook.
+:::
+
+---
+
+## 1. Why GeoAI, Why Now, Why Us?
+
+The most dangerous GeoAI programs start with a technology push ("we should be doing AI") rather than a mission pull ("this specific problem would benefit from AI on geospatial data"). Start here.
+
+### Boardroom
+
+- What specific mission outcomes are we failing to achieve — or achieving too slowly — that GeoAI could improve?
+- Are our competitors or peer organizations already deploying GeoAI? What are the consequences of falling behind?
+- Is our interest in GeoAI driven by genuine mission need, or by pressure to appear innovative?
+- Can we articulate a GeoAI value proposition in one sentence that a board member, a funder, or a member of the public would understand?
+- What is the cost of *not* investing in GeoAI? Is there a scenario where inaction is the right choice?
+- How does GeoAI fit into our broader digital transformation and AI strategy — or are we treating it as a standalone initiative?
+
+### Bullpen
+
+- Do we have actual problems where geospatial ML outperforms traditional GIS analysis, or are we looking for a nail for this hammer?
+- Have we done any proof-of-concept work? What did we learn about feasibility?
+- What are the quick wins — problems where GeoAI can deliver measurable value within months, not years?
+- Are there workflows where analysts currently spend days doing visual interpretation that a model could accelerate?
+- Which of our existing geospatial workflows are already bottlenecks that AI could relieve?
+- Is the problem really an AI problem, or is it a data engineering problem, a data access problem, or a staffing problem wearing an AI costume?
+
+---
+
+## 2. Organizational Identity and GeoAI Ambition
+
+How an organization sees itself shapes what it will attempt with GeoAI — and what it should attempt.
+
+### Boardroom
+
+- Are we a **GeoAI builder** (developing custom models), a **GeoAI buyer** (procuring vendor solutions), or a **GeoAI assembler** (fine-tuning and integrating existing models)?
+- Does our answer to the above match our actual talent and budget, or is it aspirational?
+- How much organizational change are we willing to absorb? GeoAI may require new roles, new workflows, and new ways of making decisions.
+- Do we have executive sponsorship with staying power, or will this initiative lose funding at the next budget cycle?
+- What is our planning horizon? Are we building for a one-time project, a sustained program, or a permanent organizational capability?
+- How do we handle the tension between "move fast with AI" and "our organization moves deliberately by design"?
+
+### Bullpen
+
+- Do we have the engineering maturity to support ML in production, or are we still struggling with basic data pipelines and version control?
+- Are we honest about our starting point? A team that has never deployed a REST API should not plan to deploy real-time geospatial inference next quarter.
+- What is the gap between our proof-of-concept environment and our production environment? Is it a crack or a canyon?
+- Do we have the institutional patience for the 6-18 months it takes to go from prototype to reliable production model?
+- Will our organization let us fail fast and iterate, or does every project need to succeed on the first try?
+- How much technical debt are we willing to accumulate in the name of speed?
+
+---
+
+## 3. Data: The Foundation of Everything
+
+Every GeoAI conversation eventually becomes a data conversation. Address this early.
+
+### Boardroom
+
+- What geospatial data do we already own, license, or have access to? Do we actually know?
+- What does our annual geospatial data spend look like, and how would GeoAI change it?
+- Do we have data sovereignty or data residency requirements that constrain where data can be stored and processed?
+- What are the licensing implications of using commercial imagery to train AI models? Do our current licenses permit this?
+- Are there data sharing agreements with partners that would be affected by AI-derived products?
+- Who is accountable for the quality, accuracy, and currency of our geospatial data holdings?
+- How do we feel about open data vs. proprietary data? Are we prepared to depend on datasets we don't control?
+- If we generate AI-derived geospatial products, who owns the intellectual property?
+
+### Bullpen
+
+- Can we actually access our own data programmatically, or is it trapped in desktop GIS projects, disconnected file shares, and someone's external hard drive?
+- Is our imagery in cloud-optimized formats, or are we going to spend six months just doing format conversion?
+- How do we handle the sheer volume? A single year of moderate-resolution satellite coverage can be petabytes. Where does it live? How do we search it?
+- Do we have labeled training data, or do we need to create it? Labeling geospatial data is expensive and requires domain expertise — who does this?
+- How do we version datasets that are hundreds of gigabytes or terabytes?
+- What is our data catalog situation? Can a new team member discover what data exists without asking five people?
+- Are our coordinate reference systems consistent, or is every dataset in a different projection?
+- How current does our data need to be? Is last month's imagery good enough, or do we need near-real-time?
+- Do we have ground truth data for validation, or are we going to validate satellite-derived predictions against... other satellite-derived predictions?
+- What happens when a data vendor changes their API, their pricing, or their licensing terms?
+
+---
+
+## 4. Models: Build, Buy, Fine-Tune, or Prompt?
+
+The AI model landscape is shifting fast. The "right" approach today may not be the right approach in six months.
+
+### Boardroom
+
+- Should we invest in building models from scratch, or is fine-tuning a foundation model more appropriate for our scale and budget?
+- What is our vendor strategy for AI models? Single vendor, multi-vendor, open-source only?
+- How do we evaluate commercial GeoAI products? What due diligence is required before procurement?
+- What happens if our primary model vendor is acquired, pivots, or raises prices?
+- Are we comfortable with the opacity of some foundation models, or do we require full explainability?
+- How do we think about model shelf life? AI models are not "buy once, use forever" — they degrade as the world changes. Are we budgeting for ongoing maintenance?
+- What is our policy on using open-source models? Are there legal or security concerns?
+- If a model makes a wrong prediction that leads to a bad decision, who is accountable — the vendor, the developer, or the decision maker who acted on the output?
+
+### Bullpen
+
+- Which geospatial foundation models are relevant to our use cases (e.g., Prithvi, Clay, SatCLIP, IBM/NASA models)? Have we evaluated any of them?
+- Do we have enough labeled data to fine-tune effectively, or are we in few-shot / zero-shot territory?
+- Are we solving a problem that's actually well-suited to deep learning, or would a classical ML approach (random forest, gradient boosting) work just as well at a fraction of the complexity?
+- How do we handle the geospatial-specific challenges — tile boundary effects, scale dependence, spatial autocorrelation in train/test splits?
+- What framework do we standardize on — PyTorch, TensorFlow, JAX? Or do we need to support multiple?
+- How do we handle multi-modal inputs (optical + SAR + elevation + vector)?
+- What does our experiment tracking look like? Can we reproduce a model from six months ago?
+- How do we evaluate model performance in a way that is meaningful to stakeholders, not just other data scientists?
+- Are we planning for spatial cross-validation, or are we going to accidentally overfit by using spatially adjacent tiles in train and test sets?
+- What is our strategy for handling clouds, shadows, seasonal variation, and other noise in optical imagery?
+
+---
+
+## 5. Governance and Guardrails
+
+Governance done well enables speed. Governance done poorly (or not done at all) eventually causes a crisis.
+
+### Boardroom
+
+- Do we have an AI governance framework, or are we making it up as we go?
+- Who has the authority to approve a GeoAI model for production use? Is that clear to everyone?
+- What is our Acceptable Use Policy for GeoAI? Are there use cases we will categorically refuse to pursue?
+- How do we handle dual-use concerns — models that could serve beneficial purposes but also enable surveillance, targeting, or other harmful applications?
+- Are we subject to executive orders, regulations, or sector-specific rules about AI use? (e.g., EU AI Act, US EO 14110, agency-specific AI directives)
+- How do we maintain public trust when using AI to generate geospatial products that affect communities?
+- What is our disclosure policy? Do stakeholders know when a geospatial product was generated by AI rather than a human analyst?
+- How do we handle Freedom of Information requests for AI model details?
+- What are the insurance and liability implications of AI-generated geospatial products?
+
+### Bullpen
+
+- Do the governance requirements actually make sense technically, or are they checkbox exercises that slow us down without improving safety?
+- How lightweight can a governance review be for low-risk models? Does a land-cover classifier for internal research need the same review as a flood-warning system?
+- Can we automate parts of the governance review (e.g., automated bias audits, automated model card generation)?
+- How do we balance "ship fast" with "review thoroughly"? Is there a tiered approach based on risk?
+- Are governance reviewers technically literate enough to evaluate model artifacts, or do they need things translated?
+- What documentation format does the governance board actually want? Notebooks? PDFs? Dashboards?
+- How do we handle model updates? Does every minor retrain need a full governance review, or is there an expedited path for low-risk changes?
+- What happens when governance says no? Is there a clear path to address concerns and resubmit?
+
+---
+
+## 6. Responsible AI: Ethics in the Geospatial Context
+
+Geospatial AI raises specific ethical issues that generic AI ethics frameworks may miss.
+
+### Boardroom
+
+- High-resolution imagery can reveal personal information. Where do we draw the line between useful analysis and surveillance?
+- GeoAI models often perform differently across geographies — better in cities, worse in rural areas; better in the Global North, worse in the Global South. How do we address this inequity?
+- If our model identifies a problem in a community (e.g., informal settlements, environmental hazards), do we have an obligation to act? To whom?
+- Are we considering the communities that appear in our training data and model outputs as stakeholders, or only as data points?
+- How do we handle the tension between model transparency ("here's what the model sees") and security ("we can't reveal our imagery sources or model capabilities")?
+- What is our position on using AI-generated geospatial products for decisions that affect people's lives, livelihoods, or property rights?
+- Do we have the organizational courage to shelve a technically impressive model if the ethical risks outweigh the benefits?
+
+### Bullpen
+
+- How do we test for geographic bias when we may not have ground truth data in underrepresented regions?
+- Are our evaluation metrics capturing fairness across geographies, or just reporting aggregate performance?
+- How do we handle the temporal bias problem — models trained on historical data may encode historical inequities?
+- What do we do when a model works well in aggregate but fails badly in specific, identifiable communities?
+- How do we communicate uncertainty to users who want definitive answers?
+- Are we building in human review checkpoints for high-stakes predictions, or are we letting automation run unchecked?
+- How do we handle adversarial inputs — deliberately crafted imagery or data designed to fool our models?
+- What is our approach to model interpretability? Can we explain *why* the model made a specific prediction at a specific location?
+- Are we tracking the environmental cost of training large geospatial models? GPU compute has a carbon footprint.
+
+---
+
+## 7. Talent, Culture, and Organizational Change
+
+GeoAI is as much a people challenge as a technology challenge.
+
+### Boardroom
+
+- Do we hire GeoAI specialists, or do we retrain existing geospatial analysts and data scientists? Or both?
+- The GeoAI talent market is extremely competitive. Can we compete on compensation, or do we need to compete on mission, flexibility, and culture?
+- How do we prevent a two-tier culture where "AI people" are seen as elite and traditional analysts feel threatened or devalued?
+- Who owns GeoAI organizationally — the GIS shop, the data science team, IT, a new unit, or a cross-functional team?
+- How do we ensure domain experts (the people who actually understand the geospatial problems) are empowered to shape AI solutions, not just consulted?
+- Are our managers and directors technically literate enough to evaluate GeoAI proposals, or are they approving things they don't understand?
+- How do we retain GeoAI talent? What is our plan for when key people leave?
+
+### Bullpen
+
+- Are there enough of us to actually do this? GeoAI work is intensive — can our team handle new model development while maintaining existing systems?
+- Do the GIS analysts trust us? Do we trust their domain expertise? Is there a working relationship, or a cultural divide?
+- How do we handle the "10x developer" problem — when one person becomes the single point of failure for a critical model?
+- What does professional development look like? Do we get time and budget for learning, conferences, and experimentation?
+- How do we preserve institutional knowledge when it lives in one person's head and their undocumented notebooks?
+- Are we empowered to push back when leadership asks for unrealistic timelines or oversells model capabilities?
+- What is the career path for a GeoAI developer here? Does it dead-end, or is there growth?
+- How do we collaborate across time zones, security domains, and organizational boundaries?
+
+---
+
+## 8. Infrastructure, Compute, and Cloud
+
+GeoAI is computationally expensive and data-intensive. Infrastructure decisions are strategic decisions.
+
+### Boardroom
+
+- Cloud or on-premises? Or hybrid? What do our security requirements, data residency rules, and budget support?
+- What is the estimated annual compute cost for our GeoAI ambitions? Are we prepared for GPU bills that may be 10-100x our current compute spend?
+- How do we handle classified or sensitive data that cannot go to commercial cloud?
+- Are we investing in infrastructure that our team can actually manage, or are we building something that requires a DevOps team we don't have?
+- What is our cloud vendor strategy — single provider (lock-in risk) or multi-cloud (complexity cost)?
+- How do we handle burst capacity for model training without paying for idle GPUs?
+
+### Bullpen
+
+- Do we have GPU access today, or do we submit a request and wait three weeks?
+- What is our actual experience with containerized ML workloads? Can we run a training job on Kubernetes, or are we still running everything on local machines?
+- How do we handle the storage problem? Raw imagery is enormous. Processed chips for training are enormous. Model checkpoints are enormous. Where does it all go?
+- Can our network bandwidth handle moving terabytes of imagery to our compute environment?
+- Do we have a CI/CD pipeline for ML models, or is "deployment" someone copying files to a server?
+- How do we handle reproducibility? Can we rebuild our entire environment (data, code, dependencies, compute config) from scratch?
+- What is our monitoring story? When a deployed model starts performing poorly, how quickly do we find out?
+- Are we optimizing for training cost, inference latency, or both? These often trade off against each other.
+- How do we handle the security implications of GPU-enabled cloud instances that may have broader network access than our traditional compute?
+
+---
+
+## 9. Partnerships, Procurement, and the Vendor Landscape
+
+No organization builds GeoAI entirely in-house. Partnerships and procurement decisions have long-term consequences.
+
+### Boardroom
+
+- What partnerships (academic, industry, government, international) would accelerate our GeoAI program?
+- How do we evaluate GeoAI vendors? The market is full of startups making bold claims — how do we separate substance from hype?
+- What procurement vehicles do we have for AI and cloud services? Are they fast enough to keep up with the technology?
+- How do we handle intellectual property when co-developing models with partners?
+- Are our partnership agreements AI-ready? Do they address model ownership, training data rights, and derived product rights?
+- What is our open-source strategy? Do we contribute back, only consume, or avoid entirely?
+- How do we handle vendor concentration risk — what if our key imagery provider or cloud vendor changes terms?
+
+### Bullpen
+
+- Which vendor APIs have we actually evaluated, and which are we just assuming will work?
+- How painful is vendor integration with our existing stack? Is there a realistic estimate of the engineering effort?
+- Are vendor benchmarks trustworthy, or do we need to rerun evaluations on our own data?
+- How do we handle the "vendor lock-in through data format" problem — proprietary data formats that make migration expensive?
+- What is our experience with open-source geospatial AI tools? Are we contributing, or just consuming?
+- When a vendor library has a breaking change, how long does it take us to recover?
+- Are academic partnerships productive, or do they produce papers that don't translate to production?
+- How do we handle the licensing complexity of training on data from multiple sources with different terms?
+
+---
+
+## 10. Risk, Failure, and Incident Planning
+
+Things will go wrong. The question is whether you have planned for it.
+
+### Boardroom
+
+- What is the worst-case scenario for a GeoAI failure in our context? (Wrong flood zone? Missed building damage? Misidentified land use that affects property rights?)
+- Do we have insurance coverage for AI-generated geospatial products?
+- What is our communication plan when a model fails publicly?
+- How do we handle the liability chain — from data provider to model developer to decision maker to affected community?
+- Are we stress-testing our models against adversarial scenarios, or only against typical conditions?
+- What is our model retirement strategy? How do we know when to take a model out of service?
+- Have we budgeted for incident response and model remediation?
+
+### Bullpen
+
+- Do we have a kill switch for deployed models? How fast can we disable a model that is producing harmful outputs?
+- What does our monitoring actually catch? Are we detecting model drift, or just waiting for user complaints?
+- How do we do post-mortems when models fail? Is there a blameless culture, or do failure investigations become blame exercises?
+- Do we have rollback procedures — can we revert to the previous model version quickly?
+- How do we test disaster scenarios? Do we ever simulate model failures in staging?
+- What is our logging strategy? When something goes wrong, do we have the data to understand why?
+- How do we handle cascading failures — when model A feeds model B, and model A degrades?
+- Are our SLAs realistic, or did someone promise five-nines availability for a research prototype?
+
+---
+
+## 11. Measuring Success and Communicating Value
+
+If you cannot explain the value of your GeoAI program, you cannot sustain it.
+
+### Boardroom
+
+- How do we measure return on investment for GeoAI? Is it cost savings, speed, accuracy, new capabilities, or all of the above?
+- Can we articulate GeoAI value in terms that non-technical stakeholders understand?
+- How do we avoid the "demo trap" — impressive proofs of concept that never deliver operational value?
+- What is our reporting cadence for GeoAI program status? Quarterly? Annual?
+- How do we handle the "valley of disillusionment" when early hype meets production reality?
+- Are we measuring what matters, or what is easy to measure?
+- How do we communicate both successes and limitations honestly?
+
+### Bullpen
+
+- What metrics do stakeholders actually care about, and how do we surface them without a PhD in dashboard design?
+- How do we avoid "accuracy theater" — reporting inflated metrics that don't reflect real-world performance?
+- Can we quantify the time saved or decisions improved by GeoAI vs. traditional approaches?
+- How do we handle the "it's only 85% accurate" conversation with stakeholders who expect 100%?
+- What is our strategy for managing expectations? Stakeholders who saw a ChatGPT demo may expect magic.
+- How do we show value during the long, unglamorous data preparation and model development phase?
+- Are we tracking technical metrics that we can map to business outcomes?
+
+---
+
+## 12. The Horizon: What is Coming Next?
+
+GeoAI is evolving rapidly. Some planning for uncertainty is essential.
+
+### Boardroom
+
+- How do we stay informed about GeoAI advancements without chasing every trend?
+- What emerging regulations (domestic and international) could affect our GeoAI program?
+- How do we plan for the possibility that foundation models make some of our current investments obsolete?
+- Are we building flexible architectures, or are we locked into approaches that will be outdated in two years?
+- What geopolitical risks could affect our access to satellite data, cloud compute, or AI talent?
+- How do we position our organization to be a GeoAI leader, not just a follower?
+
+### Bullpen
+
+- Are we architecting for modularity — can we swap out a model component without rebuilding the whole pipeline?
+- How do we keep our skills current when the field moves this fast?
+- Are we experimenting with emerging approaches (multimodal models, foundation model prompting, synthetic data generation) at low risk?
+- What would it take to incorporate real-time or near-real-time geospatial AI into our workflows?
+- How do we handle the "rewrite vs. iterate" decision when new approaches emerge?
+- Are we documenting our architectural decisions so future developers understand why things were built the way they were?
+
+---
+
+## Using This Guide
+
+### For the Boardroom
+
+1. **Read all sections**, but focus your workshop discussion on sections 1-3, 5, 7, and 11
+2. **Flag the questions that provoke the most debate** — those are your highest-priority planning items
+3. **Share your flagged questions with the development team** before making decisions
+4. **Use the rest of this playbook** (chapters on Strategy, Governance, Data, Risk, Talent, Investment) to work toward answers
+
+### For the Bullpen
+
+1. **Read all sections**, but focus your workshop discussion on sections 3-4, 6, 8, and 10
+2. **Be honest about where you are today** — overpromising at the planning stage creates technical debt and erodes trust
+3. **Bring your flagged questions to leadership** — they need to hear the operational reality before setting strategy
+4. **Use the rest of this playbook** (chapters on Getting Started, Data Engineering, Model Lifecycle, Deployment, Responsible AI, Tooling) to build the answers
+
+### For Everyone
+
+The single most valuable thing you can do with this chapter is **use it to start a conversation between the boardroom and the bullpen**. GeoAI programs fail when strategy is disconnected from operations. They succeed when both sides understand each other's constraints, concerns, and capabilities.
