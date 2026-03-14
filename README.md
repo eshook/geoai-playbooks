@@ -7,9 +7,17 @@ Two aligned Quarto books for adopting Geospatial AI (GeoAI) at your organization
 | **GeoAI in a Meeting** | Decision Makers | Strategy, governance, risk, talent, investment |
 | **GeoAI in a Day** | Developers | Data engineering, model lifecycle, deployment, responsible AI |
 
-Both books open with a shared **Organizational Brainstorming & Planning Guide** — a comprehensive set of 150+ questions organized across 12 domains (from "Why GeoAI?" to "What's coming next?") that surface the issues organizations need to think through before populating the playbooks. Each question is framed from two perspectives: the **Boardroom** (CXO-level strategic concerns) and the **Bullpen** (developer/data-scientist operational realities).
+Both books open with a shared **Organizational Brainstorming & Planning Guide** — a comprehensive set of 150+ questions organized across 12 domains (from "Why GeoAI?" to "What's coming next?") that surface the issues organizations need to think through before populating the playbooks. Each question is tagged by **C-suite role** (CEO, CFO, CSO, CTO, CGO) and **organizational level** (Executive, Senior Manager, Middle Manager, Individual Contributor).
 
 The two books share a common glossary, procedures, and cross-references so that strategic decisions made by leadership are directly visible in the operational guidance developers follow.
+
+## Live Preview
+
+The books are automatically built and published to **GitHub Pages** on every push:
+
+> **[View the GeoAI Playbooks online](https://eshook.github.io/geoai-playbooks/)**
+
+The landing page links to both books. Every push to `main` or `claude/**` branches triggers a rebuild via GitHub Actions.
 
 ## Quick Start
 
@@ -18,7 +26,7 @@ The two books share a common glossary, procedures, and cross-references so that 
 - [Quarto](https://quarto.org/docs/get-started/) (1.3+)
 - Python 3.10+ (for code examples)
 
-### Build
+### Build Locally
 
 ```bash
 # Build both books
@@ -30,13 +38,23 @@ bash scripts/validate.sh
 
 Output goes to `_book/decision-makers/` and `_book/developers/`.
 
-### Preview a Single Book
+### Preview a Single Book Locally
 
 ```bash
 cd books/decision-makers && quarto preview
 # or
 cd books/developers && quarto preview
 ```
+
+### CI/CD
+
+The repository includes a GitHub Actions workflow (`.github/workflows/publish.yml`) that:
+
+1. Installs Quarto automatically
+2. Builds both books
+3. Deploys to GitHub Pages
+
+No manual build step is required — just push your changes.
 
 ## Repository Structure
 
@@ -70,9 +88,13 @@ geoai-playbooks/
 │   ├── _glossary-content.qmd   # Quarto-includable glossary
 │   ├── _procedures-content.qmd # Quarto-includable procedures
 │   └── templates/              # Templates for new chapters
+├── .github/
+│   └── workflows/
+│       └── publish.yml         # CI: build both books + deploy to Pages
 ├── scripts/
-│   ├── build.sh                # Build both books
+│   ├── build.sh                # Build both books locally
 │   └── validate.sh             # Validate structure integrity
+├── index.html                  # Landing page for GitHub Pages
 ├── CLAUDE.md                   # AI agent development guidance
 └── README.md                   # This file
 ```

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoAI Playbooks</title>
+  <style>
+    :root {
+      --primary: #2c6faa;
+      --primary-dark: #1e4d78;
+      --accent: #3d9970;
+      --accent-dark: #2d7555;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #2c3e50;
+      --text-light: #5a6c7d;
+      --border: #e1e8ed;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.15rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
+      max-width: 960px;
+      margin: -2rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+      padding: 1.75rem 1.75rem 1rem;
+    }
+
+    .card-header h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-header .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .card-body {
+      padding: 0 1.75rem 1.75rem;
+      flex: 1;
+    }
+
+    .card-body p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-body ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card-body li {
+      padding: 0.3rem 0;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .card-body li::before {
+      content: "→ ";
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .card-dm .card-header { border-top: 4px solid var(--primary); }
+    .card-dev .card-header { border-top: 4px solid var(--accent); }
+
+    .card-footer {
+      padding: 1rem 1.75rem;
+      border-top: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .card-dm .card-footer { color: var(--primary); }
+    .card-dev .card-footer { color: var(--accent); }
+
+    .shared-banner {
+      max-width: 960px;
+      margin: 1rem auto 2rem;
+      padding: 0 1.5rem;
+    }
+
+    .shared-banner .inner {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      text-align: center;
+    }
+
+    .shared-banner h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .shared-banner p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      border-top: 1px solid var(--border);
+    }
+
+    footer a { color: var(--primary); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>GeoAI Playbooks</h1>
+    <p>Two aligned guidebooks for adopting Geospatial AI at your organization — from boardroom strategy to developer workflow.</p>
+  </header>
+
+  <div class="cards">
+    <a href="decision-makers/" class="card card-dm">
+      <div class="card-header">
+        <h2>GeoAI in a Meeting</h2>
+        <div class="subtitle">Playbook for Decision Makers</div>
+      </div>
+      <div class="card-body">
+        <p>Strategic guidance for executives, program managers, and policy officers adopting GeoAI.</p>
+        <ul>
+          <li>GeoAI strategy &amp; vision</li>
+          <li>Governance framework</li>
+          <li>Data acquisition strategy</li>
+          <li>Risk management</li>
+          <li>Talent &amp; team building</li>
+          <li>Investment &amp; roadmap</li>
+        </ul>
+      </div>
+      <div class="card-footer">Open Decision Maker Playbook &rarr;</div>
+    </a>
+
+    <a href="developers/" class="card card-dev">
+      <div class="card-header">
+        <h2>GeoAI in a Day</h2>
+        <div class="subtitle">Playbook for Developers</div>
+      </div>
+      <div class="card-body">
+        <p>Operational guidance for GeoAI engineers, data engineers, and ML practitioners.</p>
+        <ul>
+          <li>Getting started at your org</li>
+          <li>Data engineering pipelines</li>
+          <li>Model lifecycle management</li>
+          <li>Deployment &amp; monitoring</li>
+          <li>Responsible AI in practice</li>
+          <li>Tooling &amp; infrastructure</li>
+        </ul>
+      </div>
+      <div class="card-footer">Open Developer Playbook &rarr;</div>
+    </a>
+  </div>
+
+  <div class="shared-banner">
+    <div class="inner">
+      <h3>Aligned by Design</h3>
+      <p>Both playbooks share a common glossary, procedures, and cross-references. Strategic decisions in the Decision Maker playbook directly map to operational guidance in the Developer playbook.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>GeoAI Playbooks &middot; Built with <a href="https://quarto.org">Quarto</a> &middot; <a href="https://github.com/eshook/geoai-playbooks">Source on GitHub</a></p>
+  </footer>
+
+</body>
+</html>

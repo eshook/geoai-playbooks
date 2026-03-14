@@ -28,15 +28,19 @@ geoai-playbooks/
 │   ├── _glossary-content.qmd   # Includable glossary (Quarto include)
 │   ├── _procedures-content.qmd # Includable procedures (Quarto include)
 │   └── templates/           # Chapter templates for new content
+├── .github/
+│   └── workflows/
+│       └── publish.yml      # CI: build + deploy to GitHub Pages
 ├── scripts/
-│   ├── build.sh             # Build both books
+│   ├── build.sh             # Build both books locally
 │   └── validate.sh          # Validate structure and cross-references
+├── index.html               # Landing page for GitHub Pages
 └── _book/                   # Build output (gitignored)
 ```
 
 ## Brainstorming Guide
 
-Both books include `brainstorming.qmd` as a shared pre-chapter with 150+ organizational planning questions across 12 domains. Each question is framed from two perspectives: **Boardroom** (strategic) and **Bullpen** (operational). Use these questions as a roadmap for content generation — each question can drive a section or subsection in the main chapters.
+Both books include `brainstorming.qmd` as a shared pre-chapter with 150+ organizational planning questions across 12 domains. Each question is tagged by C-suite role (CEO, CFO, CSO, CTO, CGO) and organizational level (Executive, Senior Manager, Middle Manager, Individual Contributor). Use these questions as a roadmap for content generation — each question can drive a section or subsection in the main chapters.
 
 The 12 brainstorming domains are:
 1. Why GeoAI, Why Now, Why Us?
@@ -71,16 +75,27 @@ The 12 brainstorming domains are:
 ## Build Commands
 
 ```bash
-# Build both books
+# Build both books locally
 bash scripts/build.sh
 
 # Validate structure
 bash scripts/validate.sh
 
-# Build a single book
+# Build a single book locally
 cd books/decision-makers && quarto render
 cd books/developers && quarto render
 ```
+
+## CI/CD and GitHub Pages
+
+The repository uses GitHub Actions (`.github/workflows/publish.yml`) to automatically:
+
+1. Build both Quarto books on every push to `main` or `claude/**` branches
+2. Deploy the combined output to GitHub Pages
+
+The deployed site includes a landing page (`index.html`) linking to both books. **You do not need to build locally** — just push your changes and the CI pipeline handles the rest.
+
+If you modify the site structure (e.g., add a third book), update the workflow's "Assemble site" step and the `index.html` landing page accordingly.
 
 ## Content Conventions
 
