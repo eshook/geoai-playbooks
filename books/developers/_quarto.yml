@@ -33,6 +33,9 @@ book:
     right: |
       [Decision Maker Playbook](../../books/decision-makers/index.qmd)
 
+execute:
+  enabled: false
+
 format:
   html:
     theme: cosmo
