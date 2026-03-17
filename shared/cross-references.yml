@@ -22,6 +22,16 @@ mappings:
       facilitate cross-functional planning workshops before populating
       the rest of the playbooks.
 
+  - decision_maker_chapter: "five-questions"
+    decision_maker_section: "The GeoAI Decision Filter"
+    developer_chapter: "getting-started"
+    developer_section: "Understanding Your Organization's GeoAI Strategy"
+    relationship: >
+      The five-question decision filter provides the strategic gate that
+      determines which use cases deserve GeoAI investment. Developers should
+      understand this filter so they can evaluate whether proposed projects
+      have genuine strategic backing and validated use cases.
+
   - decision_maker_chapter: "strategy"
     decision_maker_section: "Defining Your GeoAI Vision"
     developer_chapter: "getting-started"

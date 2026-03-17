@@ -1,0 +1,289 @@
+---
+title: "The GeoAI Decision Filter"
+---
+
+# Five Questions Before You Invest
+
+Most GeoAI programs fail not because the technology doesn't work, but because organizations invest in the wrong places, for the wrong reasons, at the wrong tempo. Before committing resources, run every proposed GeoAI initiative through these five questions — in order. Each one is a gate. If you can't answer it convincingly, stop and resolve it before moving forward.
+
+::: {.callout-tip}
+## Alignment Point
+Developers should understand this decision filter so they can evaluate whether a proposed project has genuine strategic backing. See [Getting Started — Understanding Your Organization's GeoAI Strategy](../developers/getting-started.qmd).
+:::
+
+::: {.callout-note}
+## The Meta-Principle
+GeoAI should be treated like any powerful capability — deployed where it compounds an existing strategic advantage, not sprinkled around to signal innovation. The right question is: **"Where does this make us structurally harder to compete with?"** Ignore everything else.
+:::
+
+## The Five-Question Workflow
+
+Work through these questions sequentially. Each builds on the previous answer.
+
+```{mermaid}
+flowchart TD
+    Q1["<b>Q1: The Filter</b><br/>Does location fundamentally<br/>change this decision?"]
+    Q2["<b>Q2: The Data Moat</b><br/>Do we have differentiated<br/>spatial data?"]
+    Q3["<b>Q3: The Tempo</b><br/>What decision latency<br/>must this serve?"]
+    Q4["<b>Q4: The Adoption Test</b><br/>Who will act on this,<br/>and do they trust it?"]
+    Q5["<b>Q5: The Error Budget</b><br/>What's the cost of being<br/>wrong spatially?"]
+    GO["✅ Proceed to<br/>Strategy & Investment"]
+    STOP1["⛔ Not a GeoAI problem.<br/>Solve it without spatial AI."]
+    STOP2["⛔ Data gap.<br/>Acquire or build signal first."]
+    STOP3["⛔ Architecture mismatch.<br/>Redesign for the right tempo."]
+    STOP4["⛔ Adoption risk.<br/>Solve the trust problem first."]
+    STOP5["⛔ Unacceptable risk.<br/>Add feedback loops or walk away."]
+
+    Q1 -->|"Yes — geography<br/>is load-bearing"| Q2
+    Q1 -->|"No — removing 'where'<br/>doesn't change the output"| STOP1
+    Q2 -->|"Yes — we have<br/>proprietary signal"| Q3
+    Q2 -->|"No — commodity<br/>data only"| STOP2
+    Q3 -->|"Tempo is clear and<br/>architecture matches"| Q4
+    Q3 -->|"Mismatch between need<br/>and infrastructure"| STOP3
+    Q4 -->|"Clear user, trust<br/>path exists"| Q5
+    Q4 -->|"No clear user or<br/>trust deficit"| STOP4
+    Q5 -->|"Error cost is bounded<br/>and measurable"| GO
+    Q5 -->|"Can't measure error<br/>or cost is catastrophic"| STOP5
+
+    style Q1 fill:#1a5276,color:#fff
+    style Q2 fill:#1a5276,color:#fff
+    style Q3 fill:#1a5276,color:#fff
+    style Q4 fill:#1a5276,color:#fff
+    style Q5 fill:#1a5276,color:#fff
+    style GO fill:#1e8449,color:#fff
+    style STOP1 fill:#922b21,color:#fff
+    style STOP2 fill:#922b21,color:#fff
+    style STOP3 fill:#922b21,color:#fff
+    style STOP4 fill:#922b21,color:#fff
+    style STOP5 fill:#922b21,color:#fff
+```
+
+---
+
+## Q1: Where Does Location Fundamentally Change the Decision? {#q1-filter}
+
+**The filter question.** GeoAI is only worth embedding where spatial context isn't nice-to-have but actually shifts what you'd do. If removing the "where" from a workflow doesn't meaningfully change the output, GeoAI doesn't belong there.
+
+### What to look for
+
+You're looking for decisions where geography is **load-bearing**:
+
+| Load-Bearing (GeoAI candidate) | Decorative (skip GeoAI) |
+|-------------------------------|------------------------|
+| Supply chain routing that varies by terrain and infrastructure | Monthly financial reporting with a map layer |
+| Site selection where micro-location determines success or failure | Employee training programs with regional labels |
+| Risk pricing that changes block by block | IT help desk tickets tagged by office location |
+| Resource allocation across territory with variable conditions | Org-wide policy that applies uniformly regardless of location |
+| Demand forecasting where spatial patterns drive the signal | Quarterly strategic planning that happens to mention regions |
+
+### The test
+
+Ask: **"If we removed all spatial information from this workflow, would the decision change?"**
+
+- If **yes** — geography is load-bearing. Proceed to Q2.
+- If **no** — you're putting a map on a dashboard. Don't invest in GeoAI here.
+
+### Applying the filter
+
+Walk through your organization's top 10-15 decision workflows. For each one, score it:
+
+1. **Does location data exist for this workflow?** (If not, the question is moot.)
+2. **Does the decision vary spatially?** (Same answer everywhere = not a GeoAI problem.)
+3. **Is the spatial variation the primary driver or a secondary factor?** (Primary = strong candidate. Secondary = probably not worth the complexity.)
+
+::: {.callout-note}
+## Deep Dive
+The [Strategy](strategy.qmd) chapter helps you prioritize the workflows that pass this filter and build a strategy statement around them.
+:::
+
+---
+
+## Q2: Do We Have Spatial Data That's Actually Differentiated? {#q2-data-moat}
+
+**The data moat question.** GeoAI is only as good as the geospatial data feeding it. Everyone has access to the same census data and OpenStreetMap layers. If your spatial data is commodity, your GeoAI outputs will be commodity.
+
+### The real question
+
+**What do we see about the world, geographically, that others can't?**
+
+Sources of differentiated spatial signal:
+
+| Source | Example | Why It's Differentiated |
+|--------|---------|------------------------|
+| **Operational footprint** | Your delivery routes, service calls, asset inspections | Generated by your operations; competitors can't replicate |
+| **Sensor networks** | IoT devices, weather stations, in-situ monitors | Proprietary placement and calibration |
+| **Customer spatial patterns** | Where customers are, move, and transact | First-party location behavior |
+| **Historical archives** | Decades of project data tied to specific locations | Institutional memory encoded spatially |
+| **Domain-specific labeling** | Expert annotations on imagery for your specific problem | Training data tuned to your definition of ground truth |
+
+### Commodity vs. differentiated
+
+| Commodity (everyone has it) | Differentiated (your advantage) |
+|----------------------------|-------------------------------|
+| Census demographics | Your customer transaction locations |
+| Landsat/Sentinel imagery | Your proprietary drone survey archive |
+| OpenStreetMap roads | Your fleet GPS traces and routing history |
+| FEMA flood zones | Your insurance claims data georeferenced to the parcel |
+| Public weather data | Your microclimate sensor network |
+
+If you only have commodity data, you have two options:
+
+1. **Acquire or generate differentiated signal** before investing in GeoAI.
+2. **Compete on speed or integration** — using commodity data faster or combining it more cleverly than others.
+
+Option 2 is a weaker position. Option 1 builds a moat.
+
+::: {.callout-note}
+## Deep Dive
+The [Data Strategy](data-strategy.qmd) chapter covers inventory, acquisition, and how to evaluate whether your data holdings constitute a competitive advantage.
+:::
+
+---
+
+## Q3: What Decision Latency Must This Serve? {#q3-tempo}
+
+**The tempo question.** There's a huge difference between GeoAI for long-cycle strategic planning and real-time operational decisions. The infrastructure, cost, and organizational change required are completely different. Getting this wrong means you either overbuild for a quarterly planning use case or underbuild for something that needs to run in milliseconds.
+
+### Pick the tempo first, then architect
+
+| Tempo | Example Use Case | Infrastructure Profile | Cost Profile |
+|-------|-----------------|----------------------|-------------|
+| **Strategic** (weeks–months) | Where should we open the next 20 locations? | Batch processing, modest compute, analyst-driven | Low–moderate |
+| **Tactical** (hours–days) | Which areas need inspection after this storm? | Near-real-time pipelines, moderate compute | Moderate |
+| **Operational** (minutes) | How should we reroute drivers right now? | Streaming infrastructure, edge compute, low-latency APIs | High |
+| **Embedded** (milliseconds) | Autonomous vehicle terrain classification | On-device inference, specialized hardware | Very high |
+
+### The mismatch trap
+
+Common mistakes:
+
+- **Overbuilding**: Investing in real-time streaming infrastructure for a quarterly site-selection model. You spent 10x on infrastructure the use case doesn't need.
+- **Underbuilding**: Deploying a batch-processing pipeline for a use case that needs sub-minute response. It works in the demo; it fails in production.
+- **Mixed tempos, single architecture**: Trying to serve strategic and operational use cases from the same pipeline. They have different reliability, latency, and cost requirements.
+
+### How to assess
+
+For each use case that passed Q1 and Q2:
+
+1. **What is the natural decision cadence?** How often is this decision actually made?
+2. **What is the cost of delay?** If the geo-intelligence arrives an hour late, does it matter?
+3. **What infrastructure do we have today?** What is the gap between current capability and required tempo?
+
+If the tempo you need doesn't match the infrastructure you have (or can reasonably build), either change the use case scope or invest in infrastructure first.
+
+::: {.callout-note}
+## Deep Dive
+The [Investment & Roadmap](investment.qmd) chapter helps you match infrastructure investment to the decision tempo your use cases require.
+:::
+
+---
+
+## Q4: Who Will Act on Geo-Intelligence, and Do They Trust It? {#q4-adoption}
+
+**The adoption question most technical leaders underweight.** You can build a beautiful geospatial ML pipeline, but if the regional managers or ops leads it's meant to serve don't understand it, don't trust it, or can't integrate it into how they already make decisions, it dies.
+
+### The question isn't "can we build it" — it's "will it change behavior?"
+
+For every proposed GeoAI initiative, identify:
+
+| Element | Question | Red Flag |
+|---------|----------|----------|
+| **The user** | Who is the specific person (role, not name) who will receive this output? | "The organization" or "leadership" — too vague |
+| **The current workflow** | How does this person make this decision today, without GeoAI? | "They don't" — then you're creating a new workflow, which is 10x harder than improving one |
+| **The interface** | What form does the output need to take for this person to actually use it? | A Jupyter notebook for a field manager, or a raw API for a non-technical planner |
+| **The trust path** | Why would this person trust an AI-generated spatial recommendation over their own judgment? | "Because the model is accurate" — accuracy alone doesn't create trust |
+| **The fallback** | What happens when the person disagrees with the model? | "They must follow the model" — guaranteed adoption failure |
+
+### Building trust
+
+Trust in GeoAI outputs is built through:
+
+1. **Transparency** — Users can see *why* the model flagged a location, not just *that* it did.
+2. **Validation against experience** — Early outputs are tested against decisions the user already made correctly. The model earns credibility by agreeing with expert judgment before extending it.
+3. **Graceful disagreement** — Users can override the model, and those overrides are tracked as feedback (not as defiance).
+4. **Incremental deployment** — Start as a decision *support* tool, not a decision *replacement* tool.
+
+::: {.callout-note}
+## Deep Dive
+The [Building GeoAI Teams](talent.qmd) chapter covers team structures and the organizational change required for GeoAI adoption, including how to design roles around trust and usability.
+:::
+
+---
+
+## Q5: What's the Cost of Being Wrong Spatially, and Can We Measure It? {#q5-error-budget}
+
+**The error budget question.** GeoAI models can be confidently wrong in ways that are hard to catch — a model trained on urban patterns applied to rural contexts, or satellite imagery that's six months stale driving a real-time decision.
+
+### Before building, be honest about failure modes
+
+| Failure Mode | Example | Severity |
+|-------------|---------|----------|
+| **Domain transfer** | Urban-trained model applied to rural context | High — systematic, silent |
+| **Temporal staleness** | Six-month-old imagery driving a real-time decision | High — model is confident about a world that no longer exists |
+| **Resolution mismatch** | Coarse model applied to fine-grained decisions | Medium — directionally correct but operationally useless |
+| **Label bias** | Training data labeled by one analyst's interpretation | Medium — consistent but potentially wrong everywhere |
+| **Edge-of-coverage** | Model performs well in data-rich areas, fails at margins | High — errors concentrate where you can least afford them |
+
+### The two critical sub-questions
+
+**1. What happens when the geo-prediction is wrong?**
+
+| Consequence | Example | Acceptable? |
+|------------|---------|-------------|
+| Minor inefficiency | Suboptimal delivery route costs an extra 10 minutes | Usually yes |
+| Moderate cost | Inventory allocated to wrong region, takes weeks to correct | Depends on scale |
+| Major loss | Warehouse built in wrong location based on flawed demand model | No — need human review gates |
+| Safety/rights impact | Flood zone misclassification affects insurance or evacuation | Never — requires multiple validation layers |
+
+**2. Do we have a feedback loop to know when the spatial inference was wrong?**
+
+If you can't measure the error, you can't improve the system — and you're flying blind with extra complexity.
+
+| Feedback Loop | What It Requires |
+|--------------|-----------------|
+| **Ground truth collection** | Regular field validation, updated reference data |
+| **User reporting** | Structured mechanism for end users to flag bad predictions |
+| **Outcome tracking** | Comparing model recommendations to actual outcomes (did the site succeed? did the route work?) |
+| **Drift monitoring** | Automated detection of when input data or predictions shift from training distribution |
+
+If you can't establish at least two of these feedback mechanisms for a use case, you cannot responsibly deploy GeoAI for it.
+
+::: {.callout-note}
+## Deep Dive
+The [Risk Management](risk.qmd) chapter covers risk categories, threshold-setting, and incident response for GeoAI-specific failure modes.
+:::
+
+---
+
+## Applying the Filter: A Worksheet
+
+Use this table to run your top candidate use cases through the five-question filter.
+
+| Use Case | Q1: Location load-bearing? | Q2: Differentiated data? | Q3: Tempo clear? | Q4: User identified & trusting? | Q5: Error cost bounded & measurable? | Verdict |
+|----------|:-------------------------:|:------------------------:|:-----------------:|:-------------------------------:|:-----------------------------------:|---------|
+| *Example: Storm damage assessment* | Yes — damage varies by location | Yes — our claims history + imagery | Tactical (hours) | Claims adjusters — need map interface | Moderate — wrong assessment delays payout; ground truth via inspections | **Proceed** |
+| *Example: Office space planning* | No — same policy applies everywhere | N/A | N/A | N/A | N/A | **Stop at Q1** |
+| *(Your use case 1)* | | | | | | |
+| *(Your use case 2)* | | | | | | |
+| *(Your use case 3)* | | | | | | |
+
+## What Comes Next
+
+Use cases that pass all five questions are ready for detailed planning:
+
+- **[Strategy](strategy.qmd)** — Build your GeoAI strategy statement around the surviving use cases
+- **[Data Strategy](data-strategy.qmd)** — Inventory and strengthen your data position
+- **[Investment & Roadmap](investment.qmd)** — Phase your investment to the right tempo
+- **[Building GeoAI Teams](talent.qmd)** — Design teams around adoption, not just capability
+- **[Risk Management](risk.qmd)** — Set thresholds and build feedback loops
+- **[Governance](governance.qmd)** — Establish review gates proportional to error cost
+
+Use cases that fail a gate aren't dead — they need prerequisite work before GeoAI investment makes sense. The gate tells you *what* to fix first.
+
+## Next Steps
+
+- [ ] List your organization's top 10 decision workflows that involve location
+- [ ] Run each through the five-question filter using the worksheet above
+- [ ] For use cases that pass, identify which gate they were weakest on — that's your first area to strengthen
+- [ ] For use cases that fail, document what prerequisite investment would move them past the gate
+- [ ] Share the results with your development team so technical planning starts from validated use cases

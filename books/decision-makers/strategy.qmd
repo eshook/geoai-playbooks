@@ -4,7 +4,14 @@ title: "GeoAI Strategy"
 
 # Defining Your GeoAI Vision
 
-Every successful GeoAI program starts with a clear answer to: **"Why are we investing in GeoAI, and what outcomes do we expect?"**
+::: {.callout-important}
+## Start with the Decision Filter
+Before reading this chapter, run your candidate use cases through [The GeoAI Decision Filter](five-questions.qmd). This chapter assumes you've identified use cases where geography is genuinely load-bearing (Q1) and you have differentiated spatial data (Q2). If you haven't done that work, start there.
+:::
+
+Every successful GeoAI program starts with a clear answer to: **"Where does spatial intelligence make us structurally harder to compete with?"**
+
+That's a different question than "Where can we use AI?" or "Should we put our data on a map?" The right GeoAI strategy compounds an existing advantage — it doesn't chase innovation for its own sake.
 
 ::: {.callout-tip}
 ## Alignment Point
@@ -13,11 +20,11 @@ Developers reference your strategic vision in [Getting Started — Understanding
 
 ## Key Questions for Leadership
 
-1. What mission outcomes will GeoAI improve?
-2. Where does geospatial data already play a critical role in our operations?
-3. What is our risk appetite for AI-generated geospatial products?
-4. Are we building internal capability, buying solutions, or both?
-5. What does success look like in 6 months? In 2 years?
+1. **Which decisions does geography make measurably better?** Not "where do we use maps" but "where does knowing *where* change *what we do*?" (See [Decision Filter Q1](five-questions.qmd#q1-filter).)
+2. **What spatial signal do we have that competitors don't?** The strategy should build on data that creates a moat, not on commodity inputs that produce commodity outputs. (See [Decision Filter Q2](five-questions.qmd#q2-data-moat).)
+3. **What is our risk appetite for AI-generated geospatial products?** Where on the spectrum from "decision support" to "full automation" are we willing to operate?
+4. **Are we building internal capability, buying solutions, or both?** This choice should follow from the use cases that passed the filter — not precede them.
+5. **What does success look like in 6 months? In 2 years?** Define concrete outcomes tied to the use cases that passed all five gates.
 
 ## Building a GeoAI Strategy Statement
 
@@ -25,23 +32,32 @@ A useful strategy statement includes:
 
 | Component | Description | Example |
 |-----------|-------------|---------|
-| **Mission link** | Which organizational mission does this serve? | Disaster response situational awareness |
+| **Decision targeted** | Which specific decision does this improve? | Post-storm damage triage and resource allocation |
+| **Spatial advantage** | What differentiated spatial data underpins this? | Proprietary claims history + commercial satellite imagery |
 | **Capability** | What GeoAI capability are we building? | Automated building-damage assessment |
-| **Data foundation** | What geospatial data underpins this? | Commercial satellite imagery (0.5m) |
-| **Success metric** | How will we measure impact? | Assessment delivered within 4 hours of event |
+| **Tempo** | What decision latency must this serve? | Tactical — assessment within 6 hours of event |
+| **Success metric** | How will we measure impact? | 60% reduction in time-to-first-assessment |
 | **Timeline** | When do we expect initial operating capability? | Q3 2026 |
+
+Note how the strategy statement maps directly to the five-question filter: the decision (Q1), the data (Q2), the tempo (Q3), and the success metric (which implies a user who acts on it (Q4) and a measurable outcome (Q5)).
 
 ## Prioritization Framework
 
-Not every GeoAI idea deserves immediate investment. Use a simple 2×2 matrix:
+Not every GeoAI idea deserves immediate investment. Use a simple 2x2 matrix:
 
-- **X-axis:** Mission impact (low → high)
-- **Y-axis:** Feasibility with current data and talent (low → high)
+- **X-axis:** Mission impact (low to high)
+- **Y-axis:** Feasibility with current data and talent (low to high)
 
 Focus first on the **high-impact, high-feasibility** quadrant. Move to high-impact / lower-feasibility items only after building foundational capabilities.
 
+::: {.callout-warning}
+## The Innovation Theater Trap
+If a proposed use case scored well on feasibility but poorly on Q1 (location isn't actually load-bearing), it doesn't belong on this matrix at all — no matter how easy it would be to build. Easy-to-build things that don't matter are the most dangerous investments because they consume resources while creating the illusion of progress.
+:::
+
 ## Next Steps
 
-- [ ] Draft your GeoAI strategy statement
+- [ ] Draft your GeoAI strategy statement using the template above
+- [ ] Verify that every prioritized use case passed all five gates in the [Decision Filter](five-questions.qmd)
 - [ ] Identify 2-3 pilot use cases using the prioritization framework
 - [ ] Share the strategy with your development team so they can align their work

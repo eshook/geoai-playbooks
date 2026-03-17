@@ -4,48 +4,79 @@ title: "Investment & Roadmap"
 
 # Planning GeoAI Investments
 
-GeoAI programs require sustained investment across data, compute, talent, and tooling. This chapter helps you think about phased investment and building a roadmap.
+GeoAI programs require sustained investment across data, compute, talent, and tooling. But the single biggest driver of what you need to invest in — and how much — is the **decision tempo** your use cases require.
+
+::: {.callout-important}
+## Connection to the Decision Filter
+This chapter expands on [Decision Filter Q3: What decision latency must this serve?](five-questions.qmd#q3-tempo) The difference between a quarterly planning model and a real-time routing engine isn't just speed — it's a fundamentally different cost structure, team shape, and infrastructure stack. Pick the tempo first, then architect.
+:::
 
 ## Key Questions
 
-1. What is the total cost profile for our GeoAI ambitions?
-2. How do we phase investment to deliver value incrementally?
-3. What infrastructure do we need (cloud compute, GPUs, storage)?
-4. How do we measure return on investment for GeoAI?
+1. **What decision tempo do our prioritized use cases require?** Strategic (weeks-months), tactical (hours-days), operational (minutes), or embedded (milliseconds)? Each tempo tier has a different cost profile.
+2. **Are we building for one tempo or multiple?** Mixed-tempo programs need separate infrastructure tracks — a single pipeline cannot serve a quarterly planning model and a real-time operational system.
+3. **How do we phase investment to deliver value incrementally?** Start at the tempo that delivers the most value with the least infrastructure risk.
+4. **How do we measure return on investment for GeoAI?** ROI metrics should connect directly to the decision being improved, not to technical outputs.
+
+## Matching Investment to Tempo
+
+| Tempo | Infrastructure Needs | Team Shape | Annual Cost Range | Time to First Value |
+|-------|---------------------|------------|------------------|-------------------|
+| **Strategic** (weeks-months) | Batch compute, analyst workstations, data warehouse | Small: 2-3 analysts + 1 data engineer | Low-moderate | 3-6 months |
+| **Tactical** (hours-days) | Near-real-time pipelines, cloud compute, model serving | Medium: data engineers + ML engineers + domain experts | Moderate | 6-12 months |
+| **Operational** (minutes) | Streaming infrastructure, low-latency APIs, monitoring | Large: full MLOps team + SRE + domain experts | High | 12-18 months |
+| **Embedded** (milliseconds) | Edge compute, specialized hardware, on-device inference | Specialized: embedded systems + ML optimization | Very high | 18+ months |
+
+::: {.callout-warning}
+## The Mismatch Trap
+The most common investment mistake is building operational-tempo infrastructure for strategic-tempo use cases. A quarterly site-selection model doesn't need streaming Kafka pipelines and GPU-backed inference endpoints. That's not engineering excellence — it's waste that creates ongoing maintenance burden. Conversely, underbuilding for operational tempo means your demo works but your production system fails under real-world latency requirements.
+:::
 
 ## Investment Categories
 
 | Category | Examples | Cost Drivers |
 |----------|----------|-------------|
-| **Data** | Imagery subscriptions, labeling services | Resolution, coverage, frequency |
-| **Compute** | Cloud GPU instances, training clusters | Model size, experiment volume |
-| **Talent** | Hiring, training, contractors | Market rates, retention |
+| **Data** | Imagery subscriptions, labeling services | Resolution, coverage, frequency, exclusivity |
+| **Compute** | Cloud GPU instances, training clusters | Model size, experiment volume, inference tempo |
+| **Talent** | Hiring, training, contractors | Market rates, retention, team topology |
 | **Tooling** | MLOps platforms, annotation tools | Build vs. buy decisions |
-| **Governance** | Audit processes, compliance tooling | Regulatory requirements |
+| **Governance** | Audit processes, compliance tooling | Regulatory requirements, error cost tolerance |
 
 ## Phased Roadmap Template
 
 ### Phase 1: Foundation (Months 1-6)
+
+**Goal:** Validate the highest-priority use case at the right tempo with the smallest defensible investment.
+
 - Establish governance framework
-- Conduct data inventory
+- Conduct data moat audit (see [Data Strategy](data-strategy.qmd))
 - Hire or designate core team
-- Complete 1-2 proof-of-concept projects
+- Complete 1-2 proof-of-concept projects at the tempo your use case requires
+- Identify the specific person/role who will act on model outputs (see [Decision Filter Q4](five-questions.qmd#q4-adoption))
 
 ### Phase 2: Scale (Months 7-18)
-- Deploy first production model(s)
-- Build reusable data pipelines
+
+**Goal:** Move validated use cases to production and establish infrastructure for the confirmed tempo tier.
+
+- Deploy first production model(s) with feedback loops
+- Build reusable data pipelines matched to required latency
 - Establish model registry and MLOps practices
+- Measure and report on decision-quality metrics (not just model accuracy)
 - Expand team and training
 
 ### Phase 3: Optimize (Months 18+)
+
+**Goal:** Expand to additional use cases, potentially at different tempo tiers.
+
 - Optimize model performance and cost
-- Expand to additional use cases
+- Expand to additional use cases (each passing the five-question filter)
 - Build self-service capabilities for analysts
-- Contribute to organizational knowledge base
+- Evaluate whether new use cases require a different tempo tier (and therefore different infrastructure)
 
 ## Next Steps
 
-- [ ] Estimate costs for Phase 1 use cases
-- [ ] Build a business case linking GeoAI investment to mission outcomes
-- [ ] Identify quick wins that demonstrate value early
-- [ ] Establish KPIs for measuring GeoAI program success
+- [ ] Classify each prioritized use case by decision tempo
+- [ ] Estimate costs for Phase 1, using the tempo-matched infrastructure profile
+- [ ] Build a business case linking GeoAI investment to the specific decisions being improved
+- [ ] Identify quick wins — strategic-tempo use cases that demonstrate value with minimal infrastructure
+- [ ] Establish KPIs that measure decision quality, not just model accuracy

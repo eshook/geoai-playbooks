@@ -2,9 +2,14 @@
 title: "Building GeoAI Teams"
 ---
 
-# Talent & Team Strategy
+# Talent, Trust & Adoption
 
-GeoAI sits at the intersection of geospatial science, AI/ML engineering, and domain expertise. Building the right team — or growing the one you have — is a strategic decision.
+GeoAI sits at the intersection of geospatial science, AI/ML engineering, and domain expertise. Building the right team matters — but building a team whose outputs people **actually use** matters more.
+
+::: {.callout-important}
+## Connection to the Decision Filter
+This chapter expands on [Decision Filter Q4: Who will act on geo-intelligence, and do they trust it?](five-questions.qmd#q4-adoption) The most common GeoAI failure isn't technical — it's a beautiful pipeline whose outputs never change a single decision because the people it was meant to serve don't understand it, don't trust it, or can't integrate it into how they already work.
+:::
 
 ::: {.callout-tip}
 ## Alignment Point
@@ -13,10 +18,34 @@ Developers learn about their role in the team in [Getting Started — Your Role 
 
 ## Key Questions
 
-1. What GeoAI roles do we need?
-2. Do we build internal talent, hire, or contract?
-3. How do we upskill our existing geospatial analysts?
-4. What training and professional development should we invest in?
+1. **Who specifically will receive and act on GeoAI outputs?** Not "the organization" — a specific role. If you can't name the person (or role) whose behavior should change, you don't have an adoption plan.
+2. **What form does the output need to take for that person to use it?** A Jupyter notebook for a field manager is a failure of design, not a failure of the field manager.
+3. **How do we build trust between model outputs and the people making decisions?** Accuracy alone doesn't create trust. Transparency, validation against experience, and graceful disagreement do.
+4. **What GeoAI roles do we need to build and maintain the system?** Separate question from adoption — this is about the builders, not the users.
+
+## Designing for Adoption
+
+Before hiring or training, map the adoption path for each use case:
+
+| Element | Question to Answer | Red Flag |
+|---------|-------------------|----------|
+| **The end user** | Who receives the GeoAI output? | "The organization" or "leadership" — too vague to design for |
+| **Current workflow** | How does this person make this decision today? | "They don't make this decision" — you're creating demand, not meeting it |
+| **Output format** | Map, dashboard, alert, report, API, or embedded in existing tool? | Output format chosen by engineers rather than users |
+| **Trust mechanism** | Why would this person trust the model over their own judgment? | "Because it's more accurate" — accuracy without transparency doesn't build trust |
+| **Override path** | What happens when the user disagrees with the model? | "They must follow the model" — guaranteed failure |
+| **Feedback channel** | How do user corrections flow back to improve the model? | No feedback loop — model can't learn from user expertise |
+
+### The Trust Ladder
+
+Trust in GeoAI outputs is built incrementally, not declared:
+
+1. **Shadow mode** — Model runs alongside human decisions. Compare outputs but don't act on the model yet.
+2. **Advisory mode** — Model provides recommendations. Humans decide whether to follow them. Track agreement rates.
+3. **Supported mode** — Model makes initial decisions. Humans review and can override. Track override rates and reasons.
+4. **Autonomous mode** — Model decides. Humans monitor and intervene on exceptions. Only appropriate for low-stakes, high-confidence use cases.
+
+Most organizations should plan to stay at advisory or supported mode for the first 12-18 months.
 
 ## Core GeoAI Roles
 
@@ -24,21 +53,31 @@ Developers learn about their role in the team in [Getting Started — Your Role 
 |------|--------|-------------------|
 | **GeoAI Engineer** | ML/DL, geospatial data, cloud infrastructure | CS/EE + geospatial |
 | **Geospatial Data Engineer** | ETL, cloud-native geo formats, data pipelines | GIS + data engineering |
-| **Domain Expert** | Mission knowledge, requirements definition | Analyst, planner, scientist |
+| **Domain Expert** | Mission knowledge, requirements definition, output validation | Analyst, planner, scientist |
 | **ML Ops Engineer** | Model deployment, monitoring, CI/CD | DevOps + ML |
 | **Responsible AI Lead** | Bias evaluation, policy translation, auditing | Ethics, policy, or data science |
+| **UX/Integration Lead** | User research, interface design, workflow integration | UX design + domain knowledge |
+
+Note the addition of the **UX/Integration Lead** — this role bridges the gap between what the model produces and what the end user needs. In many GeoAI failures, this role was absent.
 
 ## Team Topologies
 
 Depending on organizational size:
 
-- **Embedded model** — GeoAI practitioners sit within mission teams
-- **Center of Excellence** — A centralized GeoAI team serves multiple missions
-- **Hybrid** — Core platform team + embedded specialists
+- **Embedded model** — GeoAI practitioners sit within mission teams. Best for adoption (close to end users) but risks duplication.
+- **Center of Excellence** — A centralized GeoAI team serves multiple missions. Best for consistency but risks disconnect from users.
+- **Hybrid** — Core platform team + embedded specialists. Best balance of efficiency and adoption, but requires strong communication.
+
+::: {.callout-warning}
+## The Two-Culture Problem
+GeoAI teams that are organizationally isolated from the people they serve will build technically excellent products that nobody uses. If your team structure puts builders and users in separate reporting chains with no shared incentives, adoption will fail regardless of model quality.
+:::
 
 ## Next Steps
 
+- [ ] For each prioritized use case, identify the specific end user (role) and their current decision workflow
+- [ ] Design the output format based on what end users will actually consume (not what's easy to produce)
+- [ ] Define the trust ladder stage you're targeting for each use case at launch
 - [ ] Assess current team capabilities against the roles above
-- [ ] Identify critical skill gaps
-- [ ] Define a hiring or upskilling plan
-- [ ] Establish a GeoAI community of practice
+- [ ] Identify critical skill gaps — including UX/integration, not just ML engineering
+- [ ] Establish a GeoAI community of practice that includes end users, not just builders

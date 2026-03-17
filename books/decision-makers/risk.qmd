@@ -4,7 +4,12 @@ title: "Risk Management"
 
 # Managing GeoAI Risk
 
-GeoAI introduces specific risks that traditional IT risk frameworks may not fully cover — from biased land-use classifications to adversarial manipulation of satellite imagery inputs.
+GeoAI introduces specific risks that traditional IT risk frameworks may not fully cover — from biased land-use classifications to adversarial manipulation of satellite imagery inputs. But the most insidious risk isn't a spectacular failure. It's a model that's **confidently wrong in ways you can't detect**.
+
+::: {.callout-important}
+## Connection to the Decision Filter
+This chapter expands on [Decision Filter Q5: What's the cost of being wrong spatially, and can we measure it?](five-questions.qmd#q5-error-budget) Before building any GeoAI system, you need to be honest about two things: what happens when the geo-prediction is off, and whether you have a feedback loop to even know when it was wrong.
+:::
 
 ::: {.callout-tip}
 ## Alignment Point
@@ -13,22 +18,49 @@ Developers implement risk mitigations in [Responsible AI — Bias Audits & Fairn
 
 ## Key Questions
 
-1. What are the highest-impact failure modes for our GeoAI models?
-2. What populations or geographies could be disproportionately harmed?
-3. What is our tolerance for false positives vs. false negatives?
-4. How quickly can we disable a model that is producing harmful outputs?
-5. What are our legal and regulatory obligations?
+1. **What is the cost of being wrong spatially for each use case?** Not in abstract terms — in concrete consequences. A wrong delivery route wastes fuel. A wrong flood zone classification ruins lives.
+2. **Can we actually measure when the model is wrong?** If you don't have a feedback loop, you're flying blind with extra complexity. This is a prerequisite for deployment, not a nice-to-have.
+3. **What populations or geographies could be disproportionately harmed?** GeoAI errors are rarely uniform — they concentrate where training data is weakest, which often means the places that can least afford errors.
+4. **How quickly can we disable a model that is producing harmful outputs?** The answer needs to be tested, not theoretical.
+5. **What are our legal and regulatory obligations?** Including: what happens if a GeoAI-informed decision is challenged in court and we can't explain the model's reasoning?
 
-## GeoAI Risk Categories
+## GeoAI-Specific Failure Modes
 
-| Category | Example Risk | Mitigation Strategy |
-|----------|-------------|-------------------|
-| **Accuracy** | Model misclassifies flood zones | Validation against ground truth |
-| **Bias** | Model performs worse in rural areas | Geographic stratified evaluation |
-| **Privacy** | High-res imagery reveals personal information | Resolution limits + access controls |
-| **Security** | Adversarial inputs fool the model | Input validation + anomaly detection |
-| **Dependency** | Vendor discontinues data source | Multi-vendor strategy |
-| **Regulatory** | Model outputs violate export controls | Legal review in governance gate |
+These are the ways spatial AI fails that generic AI risk frameworks miss:
+
+| Failure Mode | What Goes Wrong | Why It's Hard to Catch | Mitigation |
+|-------------|----------------|----------------------|------------|
+| **Domain transfer** | Model trained on urban data applied to rural context | Model reports high confidence; errors are systematic | Geographic stratified evaluation; never deploy where you haven't validated |
+| **Temporal staleness** | Six-month-old imagery drives a real-time decision | Data *looks* fine — it's just outdated | Track data freshness; set maximum age limits per use case |
+| **Resolution mismatch** | Coarse model applied to fine-grained decisions | Predictions are directionally correct but operationally useless | Match model resolution to decision granularity |
+| **Label bias** | Training data reflects one analyst's interpretation | Consistent but potentially wrong everywhere | Multi-annotator validation; measure inter-rater agreement |
+| **Edge-of-coverage** | Model performs well in data-rich areas, fails at margins | Aggregate metrics look good; failures hide in the tails | Report performance by geography, not just in aggregate |
+| **Spatial autocorrelation leakage** | Train/test split uses adjacent tiles; accuracy is inflated | Test metrics are excellent; real-world performance disappoints | Spatial cross-validation with geographic buffers |
+
+## Error Consequence Framework
+
+For each deployed use case, classify the consequence of a wrong prediction:
+
+| Consequence Tier | Description | Example | Required Safeguards |
+|-----------------|-------------|---------|-------------------|
+| **Tier 1: Inconvenience** | Minor inefficiency, easily corrected | Suboptimal delivery route | Automated monitoring, periodic review |
+| **Tier 2: Moderate cost** | Measurable financial or operational impact | Inventory allocated to wrong region | Human review of high-value decisions, rollback capability |
+| **Tier 3: Significant loss** | Major financial or strategic impact, hard to reverse | Warehouse built in wrong location | Mandatory human approval, multiple validation layers |
+| **Tier 4: Safety or rights** | Impact on human safety, property rights, or civil liberties | Flood zone misclassification affecting insurance/evacuation | Independent validation, regulatory compliance review, human-in-the-loop always |
+
+::: {.callout-warning}
+## The Feedback Loop Imperative
+If you cannot establish at least two independent feedback mechanisms for a use case (see below), you cannot responsibly deploy GeoAI for it. Without feedback, errors compound silently.
+:::
+
+## Building Feedback Loops
+
+| Feedback Mechanism | What It Provides | Investment Required |
+|-------------------|-----------------|-------------------|
+| **Ground truth collection** | Direct measurement of whether predictions were correct | Field teams, updated reference data, collection workflows |
+| **User reporting** | Structured mechanism for end users to flag bad predictions | UI integration, reporting workflows, response SLAs |
+| **Outcome tracking** | Comparison of model recommendations to actual results | Data pipeline connecting predictions to business outcomes |
+| **Drift monitoring** | Automated detection of shifting input distributions or prediction patterns | MLOps infrastructure, statistical monitoring |
 
 ## Setting Risk Thresholds
 
@@ -36,13 +68,16 @@ For each deployed model, define:
 
 1. **Performance floor** — minimum acceptable accuracy on the validation dataset
 2. **Bias ceiling** — maximum acceptable disparity across geographic strata
-3. **Latency requirement** — maximum time from input to output
-4. **Availability target** — uptime SLA for production endpoints
-5. **Incident response SLA** — maximum time to disable a failing model
+3. **Freshness requirement** — maximum age of input data for each use case tempo
+4. **Latency requirement** — maximum time from input to output
+5. **Availability target** — uptime SLA for production endpoints
+6. **Incident response SLA** — maximum time to disable a failing model
 
 ## Next Steps
 
-- [ ] Catalog GeoAI-specific risks for your organization
-- [ ] Define risk thresholds for pilot use cases
+- [ ] For each prioritized use case, classify the error consequence tier
+- [ ] Identify at least two feedback mechanisms you can establish for each use case
+- [ ] Define risk thresholds for pilot use cases, including geographic performance breakdowns
+- [ ] Catalog GeoAI-specific failure modes relevant to your domain
 - [ ] Integrate GeoAI risk into your existing risk register
-- [ ] Establish incident response procedures (see shared procedure: incident-response)
+- [ ] Establish and **test** incident response procedures — including the kill switch

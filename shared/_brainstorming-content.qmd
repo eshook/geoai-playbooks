@@ -8,6 +8,19 @@ Before writing strategy documents or standing up infrastructure, your organizati
 This brainstorming guide appears in both the Decision Maker and Developer playbooks. The best GeoAI programs start with leadership and practitioners thinking through the same issues — from different angles — together. Questions are tagged by the **C-suite role** and **organizational level** they most directly concern, but everyone benefits from reading all of them.
 :::
 
+::: {.callout-tip}
+## Start Here: The Five-Question Fast Track
+If you have 30 minutes instead of a full workshop, skip to the **GeoAI Decision Filter** — five sequentially gated questions that determine whether a use case deserves GeoAI investment:
+
+1. **The Filter** — Does location fundamentally change this decision?
+2. **The Data Moat** — Do we have spatial data that's actually differentiated?
+3. **The Tempo** — What decision latency must this serve?
+4. **The Adoption Test** — Who will act on this, and do they trust it?
+5. **The Error Budget** — What's the cost of being wrong spatially, and can we measure it?
+
+These five questions distill the 150+ questions below into a rapid go/no-go workflow. Use them as a first pass, then return to the detailed domains below for the questions that matter most to your surviving use cases. Decision makers: see [The GeoAI Decision Filter](five-questions.qmd) for the full framework with worksheets.
+:::
+
 ## How to Use This Chapter
 
 Use this as a **workshop guide**. Gather your leadership team and your technical leads in the same room (or the same thread). Work through each section. Don't try to answer everything — flag the questions that are most urgent or most contested, and let those drive the order in which you read the rest of this playbook.
