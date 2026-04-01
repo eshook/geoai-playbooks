@@ -60,6 +60,17 @@ Your Acceptable Use Policy (AUP) should address:
 - Requirements for human review of model outputs
 - Prohibitions (use cases the organization will never pursue)
 
+::: {.callout-note}
+## Government and Regulated Organizations
+Public-sector organizations may have additional governance requirements beyond what's outlined here. Consider:
+
+- **Statutory mandates** — Are there laws governing AI use in your jurisdiction (state AI executive orders, EU AI Act, federal AI directives)?
+- **Procurement rules** — Does your governance framework address how GeoAI vendor solutions are evaluated and approved?
+- **Public transparency** — Does the public have a right to know when AI informs government decisions that affect them? Many jurisdictions are moving toward AI disclosure requirements.
+- **Equity review** — Government GeoAI outputs often affect resource distribution across communities. Consider adding geographic equity as a mandatory governance review criterion.
+- **Records retention** — AI model artifacts, training data, and decision logs may be subject to records retention and FOIA/open records requirements.
+:::
+
 ## Next Steps
 
 - [ ] Establish or designate a GeoAI Governance Board

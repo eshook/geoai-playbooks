@@ -9,9 +9,9 @@ title: "GeoAI Strategy"
 Before reading this chapter, run your candidate use cases through [The GeoAI Decision Filter](five-questions.qmd). This chapter assumes you've identified use cases where geography is genuinely load-bearing (Q1) and you have differentiated spatial data (Q2). If you haven't done that work, start there.
 :::
 
-Every successful GeoAI program starts with a clear answer to: **"Where does spatial intelligence make us structurally harder to compete with?"**
+Every successful GeoAI program starts with a clear answer to: **"Where does spatial intelligence make us structurally better at our mission?"**
 
-That's a different question than "Where can we use AI?" or "Should we put our data on a map?" The right GeoAI strategy compounds an existing advantage — it doesn't chase innovation for its own sake.
+That's a different question than "Where can we use AI?" or "Should we put our data on a map?" The right GeoAI strategy compounds an existing advantage — it doesn't chase innovation for its own sake. For a company, "better at our mission" means harder to compete with. For a government agency, it means serving constituents more effectively, equitably, or efficiently. For a nonprofit, it means greater impact per dollar. The filter is the same; the mission definition differs.
 
 ::: {.callout-tip}
 ## Alignment Point
@@ -21,7 +21,7 @@ Developers reference your strategic vision in [Getting Started — Understanding
 ## Key Questions for Leadership
 
 1. **Which decisions does geography make measurably better?** Not "where do we use maps" but "where does knowing *where* change *what we do*?" (See [Decision Filter Q1](five-questions.qmd#q1-filter).)
-2. **What spatial signal do we have that competitors don't?** The strategy should build on data that creates a moat, not on commodity inputs that produce commodity outputs. (See [Decision Filter Q2](five-questions.qmd#q2-data-moat).)
+2. **What spatial signal do we have that's genuinely differentiated?** The strategy should build on data that gives you a meaningful advantage — whether that's proprietary business data, authoritative government records, or institutional archives — not on commodity inputs that produce commodity outputs. (See [Decision Filter Q2](five-questions.qmd#q2-data-position).)
 3. **What is our risk appetite for AI-generated geospatial products?** Where on the spectrum from "decision support" to "full automation" are we willing to operate?
 4. **Are we building internal capability, buying solutions, or both?** This choice should follow from the use cases that passed the filter — not precede them.
 5. **What does success look like in 6 months? In 2 years?** Define concrete outcomes tied to the use cases that passed all five gates.
@@ -33,7 +33,7 @@ A useful strategy statement includes:
 | Component | Description | Example |
 |-----------|-------------|---------|
 | **Decision targeted** | Which specific decision does this improve? | Post-storm damage triage and resource allocation |
-| **Spatial advantage** | What differentiated spatial data underpins this? | Proprietary claims history + commercial satellite imagery |
+| **Spatial advantage** | What differentiated spatial data underpins this? | Our damage claims history + commercial satellite imagery (insurer) *or* Our inspection records + state parcel database (state agency) |
 | **Capability** | What GeoAI capability are we building? | Automated building-damage assessment |
 | **Tempo** | What decision latency must this serve? | Tactical — assessment within 6 hours of event |
 | **Success metric** | How will we measure impact? | 60% reduction in time-to-first-assessment |

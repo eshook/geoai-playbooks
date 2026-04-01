@@ -14,10 +14,12 @@ This book is designed to be read alongside the [GeoAI in a Day — Developer Pla
 
 ## Who This Book Is For
 
-- **Executives and senior leaders** setting organizational AI strategy
+This playbook is designed to work for any organization type — private companies, government agencies (federal, state, and local), nonprofits, and academic institutions. The strategic questions are the same; only the terminology differs.
+
+- **Executives and senior leaders** setting organizational AI strategy — whether you're a CEO, an agency director, or an executive director
 - **Program and portfolio managers** overseeing GeoAI investments
 - **Policy and compliance officers** defining acceptable use and risk thresholds
-- **Technical directors** bridging strategy and implementation
+- **Technical directors and GIS program managers** bridging strategy and implementation
 
 ## How to Use This Playbook
 
@@ -32,7 +34,7 @@ Each chapter addresses a strategic domain — from vision-setting to risk manage
 
 ## Guiding Principles
 
-1. **Deploy where it compounds advantage.** GeoAI should make you structurally harder to compete with — not signal innovation. If geography isn't load-bearing for a decision, GeoAI doesn't belong there.
+1. **Deploy where it compounds advantage.** GeoAI should make you structurally better at your mission — not signal innovation. If geography isn't load-bearing for a decision, GeoAI doesn't belong there.
 2. **GeoAI is a team sport.** Success requires aligned efforts across leadership, data engineers, ML practitioners, and domain experts.
 3. **Governance enables speed.** Clear guardrails let developers move faster with confidence, not slower with bureaucracy.
 4. **Start with the mission.** Every GeoAI investment should trace back to a specific organizational mission or outcome.

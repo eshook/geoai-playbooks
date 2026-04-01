@@ -13,7 +13,7 @@ This brainstorming guide appears in both the Decision Maker and Developer playbo
 If you have 30 minutes instead of a full workshop, skip to the **GeoAI Decision Filter** — five sequentially gated questions that determine whether a use case deserves GeoAI investment:
 
 1. **The Filter** — Does location fundamentally change this decision?
-2. **The Data Moat** — Do we have spatial data that's actually differentiated?
+2. **The Data Position** — Do we have spatial data that's actually differentiated?
 3. **The Tempo** — What decision latency must this serve?
 4. **The Adoption Test** — Who will act on this, and do they trust it?
 5. **The Error Budget** — What's the cost of being wrong spatially, and can we measure it?
@@ -36,6 +36,20 @@ Questions are tagged to indicate primary ownership. Many questions are relevant 
 | **CSO** | Chief Security Officer | Data security, access controls, adversarial threats, clearances, compliance |
 | **CTO** | Chief Technology Officer | Architecture, platforms, build/buy, engineering standards, technical debt |
 | **CGO** | Chief Geospatial Officer | Geospatial strategy, GIS modernization, spatial data infrastructure, domain alignment |
+
+### Adapting Role Tags to Your Organization
+
+These playbooks use C-suite shorthand for brevity. If your organization uses different titles — as most government agencies, nonprofits, and academic institutions do — use this mapping to find your role:
+
+| Tag | Corporate | State / Local Government | Federal Government | Nonprofit / NGO |
+|-----|-----------|--------------------------|-------------------|----------------|
+| **CEO** | CEO, President | Agency Director, Secretary, Commissioner, Governor's Office | Agency Head, Under Secretary, Administrator | Executive Director |
+| **CFO** | CFO, VP Finance | Budget Director, State Comptroller, Agency CFO | CFO, Budget Office Director | Finance Director, Grants Manager |
+| **CSO** | CISO, VP Security | State CISO, Agency Security Officer, Privacy Officer | CISO, Security Office, AO (Authorizing Official) | Compliance Officer, Data Privacy Lead |
+| **CTO** | CTO, VP Engineering | State CIO, Agency IT Director, Enterprise Architect | CIO, OCIO, Chief Data Officer | IT Director, Technology Lead |
+| **CGO** | Chief Geospatial Officer, VP Analytics | State GIO, GIS Program Manager, Geospatial Director | Geospatial Program Lead, GIS Division Chief | GIS Manager, Spatial Data Lead |
+
+The questions below apply regardless of title. What matters is the **function**, not the label.
 
 ### Level Tags
 

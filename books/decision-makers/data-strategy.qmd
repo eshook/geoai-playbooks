@@ -4,11 +4,11 @@ title: "Data Strategy"
 
 # Data Acquisition & Management
 
-GeoAI is only as good as the geospatial data that feeds it. But this chapter isn't just about having data — it's about having **data that constitutes a competitive advantage**. Your data strategy determines what questions you can answer, how quickly you can answer them, and whether your competitors can replicate your answers with a credit card and a vendor account.
+GeoAI is only as good as the geospatial data that feeds it. But this chapter isn't just about having data — it's about having **data that's genuinely suited to your mission**. Your data strategy determines what questions you can answer, how quickly you can answer them, and whether generic, off-the-shelf data would produce the same answers.
 
 ::: {.callout-important}
 ## Connection to the Decision Filter
-This chapter expands on [Decision Filter Q2: Do we have spatial data that's actually differentiated?](five-questions.qmd#q2-data-moat) If your spatial data is commodity, your GeoAI outputs will be commodity. The goal of data strategy is to build and protect a **data moat** — spatial signal that others can't easily replicate.
+This chapter expands on [Decision Filter Q2: Do we have spatial data that's actually differentiated?](five-questions.qmd#q2-data-position) If your spatial data is commodity, your GeoAI outputs will be commodity. The goal of data strategy is to build and strengthen your **data position** — spatial signal that is uniquely suited to your use cases.
 :::
 
 ::: {.callout-tip}
@@ -18,38 +18,43 @@ Developers implement your data strategy in [Data Engineering — Working with Or
 
 ## Key Questions
 
-1. **What spatial data do we generate through our own operations that competitors can't?** This is the most important data strategy question. Proprietary signal from your operational footprint, sensor networks, customer patterns, or historical archives is your moat.
+1. **What spatial data do we generate through our own operations that others don't have?** This is the most important data strategy question. Signal from your operational footprint, sensor networks, service delivery patterns, or institutional archives is your strongest data asset — whether you're a company, agency, or nonprofit.
 2. **Where are the gaps between our differentiated data and our GeoAI ambitions?** Knowing what you have isn't enough — you need to know where your unique signal falls short of what your prioritized use cases require.
-3. **How do we convert commodity data into differentiated signal?** Clever combination, domain-specific labeling, or unique temporal coverage can transform publicly available data into a competitive asset.
+3. **How do we convert commodity data into differentiated signal?** Clever combination, domain-specific labeling, or unique temporal coverage can transform publicly available data into a meaningful advantage.
 4. **How do we catalog, version, and govern geospatial data?** Even differentiated data is useless if no one can find it, reproduce results from it, or trust its provenance.
-5. **What are our data sharing and licensing constraints?** Especially: can outputs derived from licensed data be shared? Do your AI training rights extend to all your data sources?
+5. **What are our data sharing and licensing constraints?** For commercial organizations: can outputs derived from licensed data be shared? For government agencies: what open data mandates apply, and how do privacy and security classifications interact with AI training?
 
 ## Assessing Your Data Position
 
-### The Data Moat Audit
+### The Data Position Audit
 
-Before acquiring new data, understand what you already have — and whether it's an advantage.
+Before acquiring new data, understand what you already have — and whether it gives you a meaningful advantage.
 
-| Data Holding | Inventory Question | Moat Question |
+| Data Holding | Inventory Question | Advantage Question |
 |-------------|-------------------|---------------|
-| Satellite imagery | Provider, resolution, revisit rate, archive depth | Is our archive longer, more frequent, or higher-resolution than what competitors can buy? |
-| Aerial / drone imagery | Coverage, frequency, resolution | Do we have systematic survey data that others would need years to replicate? |
-| Vector datasets | Boundaries, infrastructure, land use | Have we enriched public data with proprietary attributes? |
-| Operational data | Fleet GPS, service calls, asset inspections | Does our operational footprint generate spatial signal no one else has? |
-| Customer/transaction data | Location patterns, demand signals | Do we see spatial behavior that our competitors can't observe? |
-| Labeled training data | Past projects, expert annotations | Have our domain experts created ground truth that's tuned to our problems? |
-| Sensor networks | IoT, weather, environmental monitors | Do we have in-situ data that fills gaps in remote sensing? |
+| Satellite imagery | Provider, resolution, revisit rate, archive depth | Is our archive longer, more frequent, or higher-resolution than what's freely available? |
+| Aerial / drone imagery | Coverage, frequency, resolution | Do we have systematic survey data that would take years to replicate? |
+| Vector datasets | Boundaries, infrastructure, land use | Have we enriched public data with operational attributes? |
+| Operational / administrative data | Inspections, permits, service calls, incident records | Does our operational footprint generate spatial signal no one else has? |
+| Constituent / customer data | Service utilization, transaction locations, demand patterns | Do we see spatial behavior that isn't captured in public datasets? |
+| Labeled training data | Past projects, expert annotations | Have our domain experts created ground truth tuned to our specific problems? |
+| Sensor networks | IoT, weather, water quality, traffic, environmental monitors | Do we have in-situ data that fills gaps in remote sensing? |
 
-For each row, classify the holding as **commodity** (publicly available or easily purchased), **semi-differentiated** (available but we have better coverage or quality), or **differentiated** (proprietary, hard to replicate).
+For each row, classify the holding as **commodity** (widely available or easily purchased), **semi-differentiated** (available but we have better coverage, quality, or temporal depth), or **differentiated** (unique to our organization, hard to replicate).
 
-### From Commodity to Moat
+::: {.callout-note}
+## Government and Nonprofit Perspective
+Public-sector and nonprofit organizations often undervalue their data position. A state DOT's bridge inspection database, an environmental agency's 40-year water quality archive, a county's decade of geocoded 911 calls, a conservation nonprofit's species survey records — this data is differentiated even when it's publicly accessible. **Authoritative, complete, and longitudinal data is a powerful GeoAI asset regardless of whether it's behind a paywall.** Your advantage isn't exclusivity — it's that you are the source of record, your data is systematically collected, and you have temporal depth that no one-time data purchase can replicate.
+:::
+
+### Strengthening Your Data Position
 
 If your audit reveals mostly commodity data, you have options:
 
-1. **Generate signal from operations.** Instrument your workflows to produce spatial data as a byproduct. Every delivery, inspection, or service call can become a training data point.
-2. **Invest in domain-specific labeling.** The same satellite image means different things to different industries. Your experts' labels are your competitive edge.
-3. **Build temporal depth.** A single snapshot is commodity. Five years of systematic observation at the same locations is a moat.
-4. **Combine uniquely.** Individual commodity datasets are replicable. Your specific combination — fused across modalities and enriched with operational context — may not be.
+1. **Generate signal from operations.** Instrument your workflows to produce spatial data as a byproduct. Every inspection, service call, permit decision, or field visit can become a training data point.
+2. **Invest in domain-specific labeling.** The same satellite image means different things to different organizations. Your experts' labels — wetland delineations, damage classifications, infrastructure condition ratings — are your edge.
+3. **Build temporal depth.** A single snapshot is commodity. Five years of systematic observation at the same locations is an asset no vendor can sell you.
+4. **Combine uniquely.** Individual commodity datasets are widely available. Your specific combination — fused across modalities and enriched with operational context — may not be.
 
 ## Acquisition Decision Framework
 
@@ -58,21 +63,21 @@ If your audit reveals mostly commodity data, you have options:
 | **Resolution** | Higher resolution = higher cost but finer detail |
 | **Frequency** | How often do you need updated imagery? Match to your use case tempo (see [Decision Filter Q3](five-questions.qmd#q3-tempo)) |
 | **Coverage** | Global vs. regional vs. site-specific |
-| **Licensing** | Can outputs derived from this data be shared? Can it be used for AI training? |
+| **Licensing** | Can outputs be shared? Can the data be used for AI training? Do open data mandates apply to derivatives? |
 | **Format** | Cloud-optimized formats reduce engineering overhead |
-| **Exclusivity** | Does the license give you any competitive protection, or can competitors buy the same data? |
+| **Sustainability** | Can you rely on this source long-term, or is it a one-time acquisition? |
 
 ## Data Governance Principles
 
 1. **Catalog everything.** Every dataset gets an entry in the organizational catalog.
 2. **Track provenance.** Record where data came from and every transformation applied.
-3. **Control access.** Not all data should be available to all projects.
+3. **Control access.** Not all data should be available to all projects — especially data with privacy, security, or licensing restrictions.
 4. **Version datasets.** Training data must be versioned alongside the models it produces.
-5. **Plan for retirement.** Data licenses expire; have a plan for when they do.
+5. **Plan for retirement.** Data licenses expire and data ages out of relevance; have a plan for both.
 
 ## Next Steps
 
-- [ ] Conduct a geospatial data inventory using the Data Moat Audit table above
+- [ ] Conduct a geospatial data inventory using the Data Position Audit table above
 - [ ] Classify each data holding as commodity, semi-differentiated, or differentiated
 - [ ] For priority use cases, identify where commodity data is your weakest link
 - [ ] Define a plan to generate or acquire differentiated signal for your top use cases

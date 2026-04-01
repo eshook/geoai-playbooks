@@ -49,7 +49,7 @@ The most common investment mistake is building operational-tempo infrastructure 
 **Goal:** Validate the highest-priority use case at the right tempo with the smallest defensible investment.
 
 - Establish governance framework
-- Conduct data moat audit (see [Data Strategy](data-strategy.qmd))
+- Conduct data position audit (see [Data Strategy](data-strategy.qmd))
 - Hire or designate core team
 - Complete 1-2 proof-of-concept projects at the tempo your use case requires
 - Identify the specific person/role who will act on model outputs (see [Decision Filter Q4](five-questions.qmd#q4-adoption))
