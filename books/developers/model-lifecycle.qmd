@@ -54,17 +54,63 @@ model_card = {
 
 ## Development & Training
 
-### Experiment Tracking
+### Dataset and DataLoader Pattern
+
+Geospatial training data requires custom dataset classes that handle multi-band imagery, CRS alignment, and paired labels:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: PyTorch Dataset for geospatial tiles"
+
+import torch
+from torch.utils.data import Dataset
+import rasterio
+import numpy as np
+from pathlib import Path
+
+class GeoTileDataset(Dataset):
+    """
+    Dataset for paired image/label tiles stored as GeoTIFFs.
+    Handles multi-band imagery and applies augmentations.
+    """
+
+    def __init__(self, image_dir, label_dir, transform=None):
+        self.image_paths = sorted(Path(image_dir).glob("*.tif"))
+        self.label_dir = Path(label_dir)
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.image_paths)
+
+    def __getitem__(self, idx):
+        img_path = self.image_paths[idx]
+        label_path = self.label_dir / img_path.name
+
+        with rasterio.open(img_path) as src:
+            image = src.read().astype(np.float32)  # (C, H, W)
+
+        with rasterio.open(label_path) as src:
+            label = src.read(1).astype(np.int64)  # (H, W)
+
+        if self.transform:
+            image, label = self.transform(image, label)
+
+        return torch.from_numpy(image), torch.from_numpy(label)
+```
+
+### Training Loop with Experiment Tracking
 
 Track every experiment so results are reproducible and auditable:
 
 ```{python}
 #| eval: false
-#| code-summary: "Example: MLflow experiment tracking pattern"
+#| code-summary: "Example: Training loop with MLflow tracking"
 
 import mlflow
+import torch
+from torch.utils.data import DataLoader
 
-def train_model(config):
+def train_model(model, train_dataset, val_dataset, config):
     """Train a GeoAI model with full experiment tracking."""
     mlflow.set_experiment(config["experiment_name"])
 
@@ -72,21 +118,76 @@ def train_model(config):
         # Log parameters
         mlflow.log_params(config["hyperparameters"])
         mlflow.log_param("training_data_version", config["data_version"])
+        mlflow.log_param("project_crs", config.get("project_crs", "EPSG:32618"))
 
-        # ... training loop ...
+        train_loader = DataLoader(
+            train_dataset,
+            batch_size=config["hyperparameters"]["batch_size"],
+            shuffle=True, num_workers=4
+        )
+        val_loader = DataLoader(val_dataset, batch_size=16, num_workers=4)
 
-        # Log metrics
-        mlflow.log_metrics({
-            "val_accuracy": 0.0,    # Replace with actual
-            "val_f1_macro": 0.0,    # Replace with actual
-        })
+        optimizer = torch.optim.AdamW(
+            model.parameters(),
+            lr=config["hyperparameters"]["learning_rate"]
+        )
+        criterion = torch.nn.CrossEntropyLoss()
 
-        # Log the model
+        for epoch in range(config["hyperparameters"]["epochs"]):
+            # Training
+            model.train()
+            train_loss = 0.0
+            for images, labels in train_loader:
+                images, labels = images.cuda(), labels.cuda()
+                optimizer.zero_grad()
+                outputs = model(images)
+                loss = criterion(outputs, labels)
+                loss.backward()
+                optimizer.step()
+                train_loss += loss.item()
+
+            # Validation
+            model.eval()
+            val_correct, val_total = 0, 0
+            with torch.no_grad():
+                for images, labels in val_loader:
+                    images, labels = images.cuda(), labels.cuda()
+                    outputs = model(images)
+                    preds = outputs.argmax(dim=1)
+                    val_correct += (preds == labels).sum().item()
+                    val_total += labels.numel()
+
+            val_accuracy = val_correct / val_total
+            mlflow.log_metrics({
+                "train_loss": train_loss / len(train_loader),
+                "val_accuracy": val_accuracy,
+            }, step=epoch)
+
+        # Log the trained model
         mlflow.pytorch.log_model(model, "model")
-
-        # Log the model card
         mlflow.log_artifact("model_card.json")
 ```
+
+### Architecture Selection Guidance
+
+Choose your model architecture based on the task, not on what's newest:
+
+| Task | Recommended Architectures | When to Use |
+|------|--------------------------|------------|
+| **Pixel-level classification** (land cover, damage) | UNet, DeepLabV3+, SegFormer | Most common GeoAI task; start with UNet |
+| **Object detection** (buildings, vehicles) | Faster R-CNN, YOLO, DETR | When you need bounding boxes, not pixel masks |
+| **Scene classification** (land use, biome) | ResNet, EfficientNet, ViT | Whole-tile classification; simplest to implement |
+| **Change detection** (deforestation, urban growth) | Siamese UNet, BIT, ChangeFormer | Requires bi-temporal image pairs |
+| **Super-resolution** (enhance imagery) | ESRGAN, SwinIR | Use sparingly — doesn't create information, only hallucinated detail |
+
+::: {.callout-tip}
+## Transfer Learning First
+Don't train from scratch. Start with pretrained weights from torchgeo's pretrained models (trained on remote sensing data, not ImageNet). Fine-tune on your organization's labeled data. This typically cuts training time by 80% and improves performance on small datasets.
+:::
+
+### Evaluation
+
+Model evaluation for geospatial data requires spatial cross-validation, per-region performance breakdowns, and calibration analysis. See the dedicated [Evaluation & Validation](evaluation.qmd) chapter for methodology and code patterns.
 
 ## Governance Review Gate
 
@@ -105,7 +206,8 @@ Submit these artifacts to the Governance Board for review.
 - [ ] Model Card is complete and accurate
 - [ ] All experiments are tracked and reproducible
 - [ ] Bias audit has been run and results are documented
-- [ ] Validation dataset is independent of training data
-- [ ] Performance is reported with geographic and demographic breakdowns
+- [ ] Spatial cross-validation used — not random train/test split (see [Evaluation](evaluation.qmd))
+- [ ] Performance is reported with geographic and per-class breakdowns
+- [ ] Confidence calibration has been assessed
 - [ ] Known limitations are clearly documented
 - [ ] Data provenance chain is complete

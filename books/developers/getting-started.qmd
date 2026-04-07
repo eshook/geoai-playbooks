@@ -6,6 +6,25 @@ title: "Getting Started"
 
 Before writing any code, understand the strategic context you are operating in. Your organization's GeoAI strategy defines what you should build, what data you can use, and what governance gates you must pass.
 
+## The Five-Question Filter: Your Strategic Sanity Check
+
+Before writing a single line of code, confirm that your project has passed the organization's [GeoAI Decision Filter](../decision-makers/five-questions.qmd) — five sequential gates that separate validated use cases from innovation theater. If your project hasn't cleared these gates, you are building something that may never be used.
+
+As a developer, here's what each gate means for your work:
+
+| Gate | Strategic Question | What It Means for You |
+|------|-------------------|----------------------|
+| **Q1: The Filter** | Does location fundamentally change this decision? | If geography isn't load-bearing, you're building a map layer, not GeoAI. Push back. |
+| **Q2: Data Position** | Do we have differentiated spatial data? | If the answer is "just Sentinel-2 and census data," your model outputs will be commodity. Raise this early. |
+| **Q3: Tempo** | What decision latency must this serve? | This determines your entire architecture — batch pipeline vs. streaming vs. edge. Get this wrong and you rebuild from scratch. |
+| **Q4: Adoption** | Who will act on this, and do they trust it? | If no one can name the end user, your model will sit on a shelf. Insist on meeting the person who will use your output. |
+| **Q5: Error Budget** | What's the cost of being wrong spatially? | This sets your evaluation rigor, human review requirements, and monitoring investment. A Tier 4 (safety) use case requires every technique in the [Evaluation chapter](evaluation.qmd). |
+
+::: {.callout-warning}
+## When to Push Back
+If you're asked to start a project and leadership can't answer these five questions, that is a red flag — not a "we'll figure it out later" situation. Building a model for an unvalidated use case is the most expensive way to discover it was the wrong project. Raise the gap before you write code, not after.
+:::
+
 ## Understanding Your Organization's GeoAI Strategy
 
 ::: {.callout-tip}
@@ -45,6 +64,9 @@ source .venv/bin/activate
 pip install rasterio geopandas shapely pyproj
 pip install torch torchvision  # or tensorflow
 pip install scikit-learn xgboost
+
+# Data discovery and access
+pip install pystac-client planetary-computer
 
 # MLOps and experiment tracking
 pip install mlflow dvc

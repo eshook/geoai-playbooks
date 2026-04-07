@@ -43,6 +43,50 @@ for m in matches:
     print(f"  {m['name']} — {m['resolution']} — License: {m['license']}")
 ```
 
+## Coordinate Reference Systems (CRS)
+
+CRS mismatches are the most common source of silent errors in geospatial pipelines. Data from different sources arrives in different projections. If you combine them without reprojecting, your model trains on spatially misaligned data and produces garbage — often without any error message.
+
+### Rules
+
+1. **Pick a project CRS early and document it.** All data in a pipeline must share the same CRS before any spatial operation.
+2. **Use a projected CRS (meters) for analysis, not geographic (degrees).** Distance calculations in EPSG:4326 (lat/lon) are wrong — one degree of longitude varies from 111 km at the equator to 0 km at the poles.
+3. **Always check CRS on data load, not just at the end.**
+
+```{python}
+#| eval: false
+#| code-summary: "Example: CRS validation and reprojection"
+
+import rasterio
+import geopandas as gpd
+from pyproj import CRS
+
+# Define your project CRS once
+PROJECT_CRS = CRS.from_epsg(32618)  # UTM Zone 18N — pick your zone
+
+def validate_and_reproject_vector(gdf, target_crs=PROJECT_CRS):
+    """Check CRS and reproject if needed. Fail loudly on missing CRS."""
+    if gdf.crs is None:
+        raise ValueError(
+            "GeoDataFrame has no CRS. Cannot safely reproject. "
+            "Set the CRS explicitly before calling this function."
+        )
+    if gdf.crs != target_crs:
+        print(f"Reprojecting from {gdf.crs} to {target_crs}")
+        gdf = gdf.to_crs(target_crs)
+    return gdf
+
+def validate_raster_crs(raster_path, target_crs=PROJECT_CRS):
+    """Check that a raster is in the expected CRS."""
+    with rasterio.open(raster_path) as src:
+        if CRS(src.crs) != target_crs:
+            raise ValueError(
+                f"Raster {raster_path} is in {src.crs}, "
+                f"expected {target_crs}. Reproject before use."
+            )
+        return src.meta
+```
+
 ## Data Processing Patterns
 
 ### Cloud-Optimized GeoTIFF (COG)
@@ -109,11 +153,112 @@ def record_provenance(dataset_name, source, transformation, output_path):
     return provenance_path
 ```
 
+## Tiling Imagery for Training (Chipping)
+
+Most satellite and aerial imagery is far too large to feed directly into a model. You must cut it into fixed-size tiles (chips) aligned to a grid. This is one of the most common data engineering tasks in GeoAI and one of the easiest to get wrong.
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Tiling a raster into training chips"
+
+import rasterio
+from rasterio.windows import Window
+from pathlib import Path
+
+def tile_raster(input_path, output_dir, tile_size=256, overlap=0,
+                nodata_threshold=0.5):
+    """
+    Tile a raster into fixed-size chips for model training.
+
+    Parameters
+    ----------
+    tile_size : int
+        Chip size in pixels (e.g., 256, 512)
+    overlap : int
+        Overlap in pixels between adjacent tiles (for inference)
+    nodata_threshold : float
+        Skip tiles where this fraction or more of pixels are nodata
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    step = tile_size - overlap
+
+    with rasterio.open(input_path) as src:
+        for y in range(0, src.height - tile_size + 1, step):
+            for x in range(0, src.width - tile_size + 1, step):
+                window = Window(x, y, tile_size, tile_size)
+                data = src.read(window=window)
+
+                # Skip tiles that are mostly nodata
+                if src.nodata is not None:
+                    nodata_frac = (data == src.nodata).mean()
+                    if nodata_frac >= nodata_threshold:
+                        continue
+
+                # Write tile with correct geotransform
+                transform = src.window_transform(window)
+                profile = src.profile.copy()
+                profile.update(
+                    width=tile_size, height=tile_size,
+                    transform=transform
+                )
+
+                tile_path = output_dir / f"tile_{y:06d}_{x:06d}.tif"
+                with rasterio.open(tile_path, "w", **profile) as dst:
+                    dst.write(data)
+```
+
+::: {.callout-warning}
+## Tiling and Evaluation
+Your tiling strategy directly affects model evaluation. If you tile first and then split tiles randomly into train/test sets, adjacent tiles will leak between sets. See the [Evaluation chapter](evaluation.qmd) for spatial cross-validation — tile after splitting regions, not before.
+:::
+
+## STAC Catalog Integration
+
+SpatioTemporal Asset Catalogs (STAC) are the industry standard for discovering and accessing geospatial data. Use `pystac-client` to search STAC APIs rather than manually downloading data.
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Searching a STAC catalog"
+
+from pystac_client import Client
+from shapely.geometry import box
+
+def search_stac(collection, bbox, date_range, max_cloud_cover=20):
+    """
+    Search a STAC catalog for imagery matching spatial and temporal criteria.
+
+    Parameters
+    ----------
+    collection : str
+        STAC collection ID (e.g., 'sentinel-2-l2a')
+    bbox : tuple
+        (west, south, east, north) in EPSG:4326
+    date_range : str
+        Date range string (e.g., '2025-06-01/2025-08-31')
+    """
+    catalog = Client.open("https://planetarycomputer.microsoft.com/api/stac/v1")
+
+    search = catalog.search(
+        collections=[collection],
+        bbox=bbox,
+        datetime=date_range,
+        query={"eo:cloud_cover": {"lt": max_cloud_cover}},
+    )
+
+    items = list(search.items())
+    print(f"Found {len(items)} items matching criteria")
+
+    return items
+```
+
 ## Checklist: Data Readiness
 
 - [ ] Data source is in the organizational catalog
 - [ ] License and access restrictions are documented
-- [ ] Data is in cloud-optimized format
-- [ ] Provenance metadata is recorded
+- [ ] All datasets share the same project CRS (documented in project config)
+- [ ] Data is in cloud-optimized format (COG for rasters)
+- [ ] Provenance metadata is recorded for every transformation
 - [ ] Quality checks have been run (completeness, spatial coverage, no-data values)
+- [ ] Training tiles are generated with documented tile size, overlap, and nodata policy
 - [ ] Data is versioned (DVC, git-lfs, or catalog versioning)

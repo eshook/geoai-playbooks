@@ -1,0 +1,298 @@
+---
+title: "Evaluation & Validation"
+---
+
+# Evaluating GeoAI Models Rigorously
+
+Evaluation is where geospatial ML diverges most sharply from conventional ML. Standard random train/test splits, aggregate accuracy metrics, and single-number summaries are not just insufficient — they are actively misleading for spatial models. This chapter covers the practices that prevent you from shipping a model that looks great in your notebook and fails in the field.
+
+::: {.callout-tip}
+## Alignment Point
+Your organization's risk thresholds are set in the [Decision Maker Playbook — Risk Management](../decision-makers/risk.qmd). The error consequence tier assigned to your use case determines how rigorous your evaluation must be. Tier 1 (inconvenience) may accept aggregate metrics; Tier 4 (safety/rights) requires every technique in this chapter.
+:::
+
+::: {.callout-important}
+## Connection to the Decision Filter
+This chapter directly serves [Decision Filter Q5: What's the cost of being wrong spatially?](../decision-makers/five-questions.qmd#q5-error-budget) If leadership can't measure when the model is wrong, they can't responsibly deploy it. Your evaluation methodology **is** their feedback loop.
+:::
+
+## Why Standard Evaluation Fails for Spatial Data
+
+Geospatial data violates the independence assumption that underpins standard ML evaluation. Nearby pixels, parcels, or regions are correlated — a phenomenon called **spatial autocorrelation**. A random 80/20 train/test split on a satellite image will place adjacent tiles in both sets, inflating accuracy because the model is partly memorizing spatial patterns rather than learning generalizable features.
+
+| Standard ML Practice | Why It Fails for GeoAI | What to Do Instead |
+|---------------------|----------------------|-------------------|
+| Random train/test split | Adjacent tiles leak information | Spatial cross-validation with geographic buffers |
+| Single accuracy number | Hides systematic regional failures | Per-region and per-stratum performance reporting |
+| Aggregate F1 score | Rare classes vanish into the average | Per-class metrics with minimum sample thresholds |
+| Fixed test set | Model may overfit to one geography | Held-out geographic regions never seen in training |
+| Accuracy on training distribution | Doesn't test deployment conditions | Evaluate on target geography, season, and resolution |
+
+## Spatial Cross-Validation
+
+The single most important evaluation technique for GeoAI. Standard k-fold cross-validation randomly assigns samples to folds. Spatial CV assigns **geographic regions** to folds, ensuring no spatial leakage between training and validation.
+
+### Block Cross-Validation
+
+Divide your study area into spatial blocks larger than the range of spatial autocorrelation, then assign entire blocks to folds:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Spatial block cross-validation"
+
+import numpy as np
+import geopandas as gpd
+from shapely.geometry import box
+
+def create_spatial_blocks(study_area_bounds, block_size_meters):
+    """
+    Divide a study area into spatial blocks for cross-validation.
+
+    Parameters
+    ----------
+    study_area_bounds : tuple
+        (minx, miny, maxx, maxy) in projected CRS (meters)
+    block_size_meters : float
+        Block edge length. Should exceed the spatial autocorrelation
+        range of your data (typically 2-10x the feature footprint).
+
+    Returns
+    -------
+    GeoDataFrame of block polygons with fold assignments
+    """
+    minx, miny, maxx, maxy = study_area_bounds
+    blocks = []
+    block_id = 0
+
+    x = minx
+    while x < maxx:
+        y = miny
+        while y < maxy:
+            block = box(x, y,
+                        min(x + block_size_meters, maxx),
+                        min(y + block_size_meters, maxy))
+            blocks.append({"geometry": block, "block_id": block_id})
+            block_id += 1
+            y += block_size_meters
+        x += block_size_meters
+
+    blocks_gdf = gpd.GeoDataFrame(blocks, crs="EPSG:32618")  # Use your projected CRS
+    return blocks_gdf
+
+
+def assign_spatial_folds(samples_gdf, blocks_gdf, n_folds=5):
+    """
+    Assign samples to CV folds based on their spatial block membership.
+    Entire blocks go into the same fold — no leakage across block boundaries.
+    """
+    # Assign each block to a fold
+    block_ids = blocks_gdf["block_id"].values
+    np.random.shuffle(block_ids)
+    blocks_gdf = blocks_gdf.copy()
+    blocks_gdf["fold"] = [block_ids[i] % n_folds
+                          for i in range(len(blocks_gdf))]
+
+    # Spatial join: assign each sample the fold of its containing block
+    samples_with_folds = gpd.sjoin(
+        samples_gdf, blocks_gdf[["geometry", "fold"]], how="left"
+    )
+    return samples_with_folds
+```
+
+### Buffered Spatial Splitting
+
+For cases where you need a single train/test split with a geographic buffer to prevent leakage:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Buffered geographic train/test split"
+
+def buffered_spatial_split(samples_gdf, test_region_geometry,
+                           buffer_meters=1000):
+    """
+    Split samples into train/test with a geographic buffer zone.
+    Samples in the buffer are excluded from both sets to prevent leakage.
+
+    Parameters
+    ----------
+    samples_gdf : GeoDataFrame in a projected CRS (meters)
+    test_region_geometry : shapely geometry defining the test area
+    buffer_meters : width of exclusion zone around the test region
+    """
+    buffered_test = test_region_geometry.buffer(buffer_meters)
+
+    test_mask = samples_gdf.within(test_region_geometry)
+    buffer_mask = samples_gdf.within(buffered_test) & ~test_mask
+    train_mask = ~samples_gdf.within(buffered_test)
+
+    test_set = samples_gdf[test_mask].copy()
+    train_set = samples_gdf[train_mask].copy()
+    excluded = buffer_mask.sum()
+
+    print(f"Train: {len(train_set)}, Test: {len(test_set)}, "
+          f"Excluded (buffer): {excluded}")
+
+    return train_set, test_set
+```
+
+## Geographic Performance Breakdown
+
+Never report a single accuracy number. Always break down performance by the geographic strata that matter for your use case.
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Comprehensive geographic performance report"
+
+import pandas as pd
+from sklearn.metrics import (
+    accuracy_score, f1_score, precision_score,
+    recall_score, confusion_matrix
+)
+
+def geographic_performance_report(predictions_gdf, strata_column,
+                                  pred_col="predicted", true_col="actual",
+                                  classes=None):
+    """
+    Generate per-stratum and per-class performance metrics.
+    This is the minimum evaluation artifact for governance review.
+
+    Parameters
+    ----------
+    predictions_gdf : GeoDataFrame with predictions and ground truth
+    strata_column : str, column defining geographic strata
+        (e.g., 'region', 'urban_rural', 'land_cover')
+    """
+    results = []
+
+    for stratum, group in predictions_gdf.groupby(strata_column):
+        y_true = group[true_col]
+        y_pred = group[pred_col]
+
+        row = {
+            "stratum": stratum,
+            "n_samples": len(group),
+            "accuracy": accuracy_score(y_true, y_pred),
+            "f1_macro": f1_score(y_true, y_pred, average="macro",
+                                 zero_division=0),
+            "f1_weighted": f1_score(y_true, y_pred, average="weighted",
+                                    zero_division=0),
+            "precision_macro": precision_score(y_true, y_pred,
+                                               average="macro",
+                                               zero_division=0),
+            "recall_macro": recall_score(y_true, y_pred, average="macro",
+                                         zero_division=0),
+        }
+
+        # Per-class F1 scores
+        if classes is None:
+            classes = sorted(y_true.unique())
+        per_class_f1 = f1_score(y_true, y_pred, labels=classes,
+                                average=None, zero_division=0)
+        for cls, f1 in zip(classes, per_class_f1):
+            row[f"f1_class_{cls}"] = f1
+
+        results.append(row)
+
+    results_df = pd.DataFrame(results)
+
+    # Flag strata below organizational threshold
+    overall_f1 = results_df["f1_macro"].mean()
+    results_df["below_threshold"] = (
+        results_df["f1_macro"] < overall_f1 - 0.05
+    )
+
+    # Summary statistics
+    print(f"Overall mean F1 (macro): {overall_f1:.3f}")
+    print(f"Worst stratum: {results_df.loc[results_df['f1_macro'].idxmin(), 'stratum']} "
+          f"(F1={results_df['f1_macro'].min():.3f})")
+    flagged = results_df[results_df["below_threshold"]]
+    if len(flagged) > 0:
+        print(f"WARNING: {len(flagged)} strata below threshold")
+
+    return results_df
+```
+
+## Held-Out Geographic Regions
+
+Reserve entire geographic regions that the model never sees during training or hyperparameter tuning. These are your most honest performance estimates.
+
+| Strategy | When to Use | Guidance |
+|----------|------------|---------|
+| **Geographic hold-out** | You have data across many regions | Hold out 1-2 complete regions; train on the rest |
+| **Temporal hold-out** | Your data spans multiple time periods | Train on earlier dates, test on later dates |
+| **Domain hold-out** | Deploying to a new geography | Evaluate on samples from the target domain, even if small |
+| **Cross-environment** | Model must generalize across conditions | Test on different seasons, weather, lighting from training |
+
+::: {.callout-warning}
+## The Aggregate Metrics Trap
+A model with 92% overall accuracy may have 60% accuracy in rural areas and 98% in urban areas. If your use case serves rural communities, that 92% headline number is a lie. Always report the performance where it matters most for the decision being made — not the global average.
+:::
+
+## Confidence Calibration
+
+A model that says "85% confident" should be correct 85% of the time. Calibration matters because downstream users and automated systems rely on confidence scores to decide when to trust the model and when to escalate to human review.
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Calibration analysis"
+
+import numpy as np
+
+def calibration_analysis(y_true, y_prob, n_bins=10):
+    """
+    Assess whether predicted probabilities match observed frequencies.
+    Returns a calibration table for reporting and plotting.
+    """
+    bins = np.linspace(0, 1, n_bins + 1)
+    results = []
+
+    for i in range(n_bins):
+        mask = (y_prob >= bins[i]) & (y_prob < bins[i + 1])
+        if mask.sum() == 0:
+            continue
+
+        bin_center = (bins[i] + bins[i + 1]) / 2
+        observed_freq = y_true[mask].mean()
+        predicted_freq = y_prob[mask].mean()
+        count = mask.sum()
+
+        results.append({
+            "bin_center": bin_center,
+            "predicted_confidence": predicted_freq,
+            "observed_accuracy": observed_freq,
+            "count": count,
+            "calibration_error": abs(predicted_freq - observed_freq),
+        })
+
+    results_df = pd.DataFrame(results)
+    ece = (results_df["calibration_error"] * results_df["count"]).sum() / results_df["count"].sum()
+    print(f"Expected Calibration Error (ECE): {ece:.4f}")
+
+    return results_df
+```
+
+## Evaluation Artifacts for Governance Review
+
+Every model submitted for governance review should include these evaluation artifacts:
+
+| Artifact | Content | Format |
+|----------|---------|--------|
+| **Performance summary** | Per-stratum and per-class metrics from spatial CV | Table (CSV/DataFrame) |
+| **Confusion matrices** | One per geographic stratum | Heatmaps or tables |
+| **Calibration curve** | Predicted confidence vs. observed accuracy | Plot + ECE score |
+| **Failure analysis** | Examples where the model was wrong, categorized by failure mode | Table with spatial references |
+| **Data coverage map** | Where training data exists vs. where model will be deployed | Map showing gaps |
+| **Spatial CV methodology** | Block size, buffer distance, fold assignments | Text description |
+
+## Checklist: Evaluation Completeness
+
+- [ ] Spatial cross-validation used (not random split)
+- [ ] Performance reported per geographic stratum, not just aggregate
+- [ ] Per-class metrics reported with minimum sample thresholds
+- [ ] At least one held-out geographic region evaluated
+- [ ] Confidence calibration assessed
+- [ ] Failure cases analyzed and categorized by failure mode
+- [ ] Training data coverage mapped against deployment area
+- [ ] Evaluation methodology documented for governance review
+- [ ] Performance meets organizational thresholds for all required strata
+- [ ] Results compared against a simple baseline (not just in isolation)

@@ -64,6 +64,28 @@ mappings:
       Risk tolerances set by leadership translate into specific bias audit
       thresholds and testing requirements for developers.
 
+  - decision_maker_chapter: "risk"
+    decision_maker_section: "GeoAI-Specific Failure Modes"
+    developer_chapter: "evaluation"
+    developer_section: "Evaluation & Validation"
+    relationship: >
+      The failure modes and error consequence tiers defined by leadership
+      (domain transfer, temporal staleness, spatial autocorrelation leakage)
+      directly drive the evaluation methodology developers must use. The
+      evaluation chapter provides the spatial cross-validation, geographic
+      performance breakdown, and calibration techniques that make those
+      risk thresholds measurable.
+
+  - decision_maker_chapter: "five-questions"
+    decision_maker_section: "The GeoAI Decision Filter"
+    developer_chapter: "getting-started"
+    developer_section: "The Five-Question Filter: Your Strategic Sanity Check"
+    relationship: >
+      Developers need to understand and verify that their project has
+      passed all five gates of the decision filter before writing code.
+      The getting-started chapter translates each strategic gate into
+      what it means for the developer's daily work.
+
   - decision_maker_chapter: "talent"
     decision_maker_section: "Building GeoAI Teams"
     developer_chapter: "getting-started"

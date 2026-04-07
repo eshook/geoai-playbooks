@@ -15,8 +15,9 @@ This book is designed to be read alongside the [GeoAI in a Meeting — Decision 
 ## Who This Book Is For
 
 - **GeoAI / ML Engineers** building and training models
+- **Data Scientists** designing experiments and evaluating model performance
+- **GIS Professionals** integrating GeoAI into geospatial workflows
 - **Geospatial Data Engineers** building data pipelines
-- **Analysts** integrating GeoAI outputs into their workflows
 - **MLOps Engineers** deploying and monitoring models in production
 
 ## How to Use This Playbook

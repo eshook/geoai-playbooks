@@ -12,12 +12,14 @@ This chapter provides guidance on the tools, libraries, and infrastructure patte
 |----------|-------|-------|
 | **Geospatial I/O** | `rasterio`, `fiona`, `geopandas` | Core geospatial data reading/writing |
 | **Geometry** | `shapely`, `pyproj` | Geometric operations and projections |
+| **Data Discovery** | `pystac-client`, `planetary-computer` | STAC catalog search and access |
 | **ML Frameworks** | `pytorch`, `tensorflow` | Choose based on organizational standard |
-| **Geospatial ML** | `torchgeo`, `rastervision` | Geospatial-specific ML utilities |
+| **Geospatial ML** | `torchgeo`, `rastervision` | Geospatial-specific ML utilities; pretrained RS models |
 | **Experiment Tracking** | `mlflow`, `wandb` | Track experiments and models |
 | **Data Versioning** | `dvc` | Version large datasets |
 | **Visualization** | `folium`, `matplotlib`, `leafmap` | Maps and charts |
 | **API Serving** | `fastapi`, `bentoml` | Model inference endpoints |
+| **Testing** | `pytest`, `pytest-rasterio` | Unit and spatial integration tests |
 
 ## Cloud Infrastructure Patterns
 
@@ -47,17 +49,169 @@ For model training, use the organizational approved compute environment. Common 
 - **Batch training jobs** for reproducible experiments
 - **Kubernetes GPU nodes** for custom workloads
 
+## Testing Geospatial Code
+
+Geospatial code has unique testing challenges: floating-point CRS transforms, tile boundary edge cases, and data-dependent behavior. Testing is not optional — it's how you prevent silent spatial errors from reaching production.
+
+### What to Test
+
+| Test Type | What It Catches | Example |
+|-----------|----------------|---------|
+| **CRS consistency** | Misaligned layers, wrong projections | Assert output CRS matches project CRS after every transform |
+| **Tile boundary handling** | Artifacts at chip edges, missing border pixels | Feed tiles at image edges, verify no crashes or artifacts |
+| **Nodata propagation** | Nodata values treated as real data by the model | Feed a tile with 50% nodata, verify it's handled correctly |
+| **Roundtrip I/O** | Data corruption on read/write | Write a raster, read it back, assert values match |
+| **Model input/output shapes** | Dimension mismatches at inference time | Assert model output shape matches expected (B, C, H, W) |
+| **Geographic bounds** | Predictions outside the valid area | Assert all output geometries fall within the study area |
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Spatial unit tests with pytest"
+
+import pytest
+import numpy as np
+import rasterio
+from rasterio.transform import from_bounds
+from pathlib import Path
+
+@pytest.fixture
+def sample_raster(tmp_path):
+    """Create a small test raster with known values and CRS."""
+    path = tmp_path / "test.tif"
+    data = np.random.rand(3, 64, 64).astype(np.float32)
+    transform = from_bounds(0, 0, 64, 64, 64, 64)
+    with rasterio.open(
+        path, "w", driver="GTiff", height=64, width=64,
+        count=3, dtype="float32", crs="EPSG:32618",
+        transform=transform,
+    ) as dst:
+        dst.write(data)
+    return path, data
+
+def test_cog_conversion_preserves_crs(sample_raster):
+    """COG conversion must not change the CRS."""
+    input_path, original_data = sample_raster
+    output_path = input_path.parent / "output_cog.tif"
+
+    convert_to_cog(input_path, output_path)
+
+    with rasterio.open(output_path) as src:
+        assert src.crs.to_epsg() == 32618
+        assert src.is_tiled
+
+def test_tiling_covers_full_extent(sample_raster):
+    """Tiling must produce chips that together cover the original raster."""
+    input_path, _ = sample_raster
+    output_dir = input_path.parent / "tiles"
+
+    tile_raster(str(input_path), str(output_dir), tile_size=32)
+
+    tiles = list(output_dir.glob("*.tif"))
+    assert len(tiles) == 4  # 64x64 image / 32x32 tiles = 4 tiles
+
+def test_model_output_shape():
+    """Model output must match expected dimensions."""
+    model = load_model("model_v1")
+    dummy_input = torch.randn(1, 3, 256, 256)
+    output = model(dummy_input)
+    assert output.shape == (1, NUM_CLASSES, 256, 256)
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run only spatial tests
+pytest tests/ -v -k "spatial or crs or tile"
+
+# Run with coverage
+pytest tests/ --cov=src --cov-report=html
+```
+
+## Containerization
+
+Use containers to guarantee that your training environment matches your inference environment. This eliminates "works on my machine" failures, which are especially common with GDAL/rasterio version mismatches.
+
+```{python}
+#| eval: false
+#| code-summary: "Example: Dockerfile for GeoAI inference"
+
+# Dockerfile pattern — adapt to your base image and requirements
+#
+# FROM ghcr.io/osgeo/gdal:ubuntu-full-3.8.0
+#
+# WORKDIR /app
+#
+# # Install Python dependencies
+# COPY requirements.txt .
+# RUN pip install --no-cache-dir -r requirements.txt
+#
+# # Copy model and application code
+# COPY src/ ./src/
+# COPY models/ ./models/
+#
+# # Health check
+# HEALTHCHECK CMD curl -f http://localhost:8000/health || exit 1
+#
+# EXPOSE 8000
+# CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+::: {.callout-tip}
+## Base Image Matters
+Use `osgeo/gdal` as your base image, not a generic Python image. Installing GDAL from scratch in a container is fragile and slow. The OSGEO images ship with GDAL, PROJ, and GEOS pre-compiled correctly.
+:::
+
+## CI/CD for GeoAI Projects
+
+Automate testing and model validation on every commit. A minimal CI pipeline for GeoAI should include:
+
+```{python}
+#| eval: false
+#| code-summary: "Example: GitHub Actions CI pipeline for GeoAI"
+
+# .github/workflows/ci.yml
+#
+# name: GeoAI CI
+#
+# on: [push, pull_request]
+#
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+#     container:
+#       image: ghcr.io/osgeo/gdal:ubuntu-full-3.8.0
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Install dependencies
+#         run: pip install -r requirements.txt -r requirements-test.txt
+#       - name: Run spatial tests
+#         run: pytest tests/ -v --tb=short
+#       - name: Validate model card
+#         run: python scripts/validate_model_card.py models/cards/
+#       - name: Check CRS consistency
+#         run: python scripts/check_crs.py data/processed/
+```
+
 ## Version Control Practices
 
 - One repository per model or tightly-coupled model family
 - Use DVC for large files (imagery, model weights)
 - Tag model releases with semantic versioning
 - Keep notebooks clean — restart-and-run-all before committing
+- Pin GDAL/rasterio/pyproj versions — minor version changes can alter transform behavior
+- Store your project CRS in a config file, not scattered across scripts
 
 ## Checklist: Infrastructure Readiness
 
-- [ ] Development environment matches production runtime
+- [ ] Development environment matches production runtime (use containers)
+- [ ] GDAL/rasterio/pyproj versions are pinned and consistent across environments
 - [ ] Data storage follows the organizational lake layout
 - [ ] GPU compute is provisioned for training workloads
 - [ ] Experiment tracking system is configured
-- [ ] CI/CD pipeline runs model tests on every commit
+- [ ] Spatial unit tests exist and pass
+- [ ] CI/CD pipeline runs tests on every commit
+- [ ] Container image builds successfully and passes smoke tests
+- [ ] Model card validation is automated
