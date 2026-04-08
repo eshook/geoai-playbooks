@@ -19,6 +19,7 @@ book:
     - deployment.qmd
     - responsible-ai.qmd
     - tooling.qmd
+    - second-day.qmd
     - part: "Appendices"
       chapters:
         - appendix-glossary.qmd

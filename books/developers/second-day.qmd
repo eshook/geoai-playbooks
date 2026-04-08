@@ -1,0 +1,282 @@
+---
+title: "The Second Day: GeoAI for GIS Professionals"
+---
+
+# From GIS Professional to GeoAI-Informed Practitioner
+
+::: {.callout-note}
+## Who This Chapter Is For
+You are an experienced GIS professional. You've been doing spatial analysis, managing geodatabases, building maps, and solving real problems with geographic data for years — possibly decades. You are not trying to become a machine learning engineer. You are trying to become **the most effective collaborator, critic, and requester of GeoAI** in your organization. That is a different and equally valuable skill set.
+:::
+
+This chapter is a self-contained training guide. After working through it, you should be able to:
+
+- Explain what a GeoAI model does and doesn't do, in terms your colleagues understand
+- Evaluate model output with the same critical eye you apply to any spatial analysis
+- Communicate effectively with GeoAI developers — asking the right questions, providing the right feedback
+- Identify workflows in your own role where a GeoAI model would genuinely help
+- Spot common failure modes before they reach a decision-maker's desk
+
+You will not learn to build models. You will learn to be the person without whom models get built wrong.
+
+---
+
+## Part 1: What You Already Know That Matters {#what-you-know}
+
+GIS professionals underestimate how much of their existing knowledge transfers directly to GeoAI. The vocabulary changes, but the concepts are the same ones you've been working with.
+
+### The Translation Table
+
+| What You Call It in GIS | What It's Called in GeoAI | Why Your Understanding Matters |
+|------------------------|-------------------------|-------------------------------|
+| Classification (supervised, unsupervised) | Model training (supervised, unsupervised) | You already know the logic — ML automates the pattern recognition step |
+| Training sites / ground truth points | Training data / labeled data | You know what "representative" means spatially. Most ML engineers don't. |
+| Accuracy assessment (error matrix, kappa) | Model evaluation (confusion matrix, F1 score) | Same concept, different names. You've done this by hand. |
+| Resolution (spatial, spectral, temporal) | Input resolution / feature resolution | You know that 30m Landsat can't detect individual buildings. That intuition prevents bad model scoping. |
+| Projection / CRS | Coordinate Reference System | You know why mixing projections produces garbage. ML pipelines often don't check. |
+| Geoprocessing model (ModelBuilder, Python script) | ML pipeline / inference pipeline | A chain of spatial operations producing a result — the structure is identical |
+| Attribute table / feature class | Feature vector / tabular data | Same data, different frame. You know what the columns mean. |
+| Raster cell / pixel | Pixel / input tensor | You know what each cell represents physically. The model doesn't. |
+| Overlay / spatial join | Feature engineering / data fusion | Combining layers to create signal — you've been doing this your whole career |
+| Map generalization | Model abstraction / generalization | Simplifying reality to communicate — the core of what models do |
+
+::: {.callout-important}
+## The Core Insight
+A GeoAI model is doing the same thing you do when you classify imagery or run a suitability analysis — finding spatial patterns and applying rules to make predictions. The difference is that you encode the rules manually (or in your head), while the model learns the rules from examples. **This means the quality of those examples is everything.** And you are the person who knows whether the examples are representative, whether the geography is comparable, and whether the output makes spatial sense.
+:::
+
+### What's Genuinely New
+
+Not everything translates. These concepts are new and worth understanding:
+
+| New Concept | Plain-Language Explanation | Why It Matters to You |
+|-------------|---------------------------|----------------------|
+| **Training vs. inference** | Training = the model learns patterns from examples. Inference = the model applies those patterns to new data. | You will mostly interact with inference outputs. But understanding training helps you ask "what did it learn from?" |
+| **Overfitting** | The model memorized the training data instead of learning general patterns. Like memorizing the answer key instead of learning the material. | You'll see this when a model works perfectly in the demo area and fails everywhere else. |
+| **Spatial autocorrelation leakage** | Training and testing data were too close together geographically, inflating accuracy. | You understand Tobler's First Law. If someone shows you 95% accuracy and the test data was 50 meters from the training data, you know that number is a lie. |
+| **Transfer learning** | Taking a model trained on one geography or task and adapting it to yours. | When a developer says "we'll fine-tune a pretrained model," they mean this. Your question: "pretrained on what geography?" |
+| **Confidence scores** | The model's estimated probability that its prediction is correct. | Not the same as certainty. A model can be 95% confident and systematically wrong in your study area. |
+| **Data drift** | The real-world data has changed since the model was trained, so the model's predictions degrade. | You already track data currency. Same principle — a model trained on 2023 imagery may not understand 2026 conditions. |
+
+---
+
+## Part 2: How a GeoAI Model Gets Built (The View from 10,000 Feet) {#how-models-work}
+
+You don't need to know how to build a model. You need to know enough about the process to ask good questions and catch bad assumptions. Here's the lifecycle from your perspective as a domain expert and future model consumer.
+
+```{mermaid}
+flowchart TD
+    A["<b>1. Problem Framing</b><br/>What spatial question are<br/>we trying to answer?"]
+    B["<b>2. Data Assembly</b><br/>What imagery, vectors, and<br/>labels do we need?"]
+    C["<b>3. Training</b><br/>Model learns patterns<br/>from labeled examples"]
+    D["<b>4. Evaluation</b><br/>How well does it perform<br/>across different geographies?"]
+    E["<b>5. Deployment</b><br/>Model runs on new data<br/>and produces outputs"]
+    F["<b>6. Monitoring</b><br/>Is it still working correctly<br/>as conditions change?"]
+
+    YOU1["<b>YOUR ROLE:</b><br/>Define the question.<br/>Is this solvable spatially?"]
+    YOU2["<b>YOUR ROLE:</b><br/>Assess data quality.<br/>Is it representative?"]
+    YOU3["<b>YOUR ROLE:</b><br/>Light touch. Ask about<br/>geographic coverage."]
+    YOU4["<b>YOUR ROLE:</b><br/>Critical review. Does<br/>output make spatial sense?"]
+    YOU5["<b>YOUR ROLE:</b><br/>Primary consumer.<br/>Integrate into your workflows."]
+    YOU6["<b>YOUR ROLE:</b><br/>First to notice drift.<br/>Report anomalies."]
+
+    A --> B --> C --> D --> E --> F
+
+    YOU1 -.-> A
+    YOU2 -.-> B
+    YOU3 -.-> C
+    YOU4 -.-> D
+    YOU5 -.-> E
+    YOU6 -.-> F
+
+    style A fill:#1a5276,color:#fff
+    style B fill:#1a5276,color:#fff
+    style C fill:#1a5276,color:#fff
+    style D fill:#1a5276,color:#fff
+    style E fill:#1a5276,color:#fff
+    style F fill:#1a5276,color:#fff
+    style YOU1 fill:#d4ac0d,color:#000
+    style YOU2 fill:#d4ac0d,color:#000
+    style YOU3 fill:#d4ac0d,color:#000
+    style YOU4 fill:#d4ac0d,color:#000
+    style YOU5 fill:#d4ac0d,color:#000
+    style YOU6 fill:#d4ac0d,color:#000
+```
+
+### Stage 1: Problem Framing — This Is Where You Lead
+
+The developer knows ML. You know the problem. The most common GeoAI failure starts right here: a developer frames a technically interesting problem that doesn't match what the organization actually needs.
+
+**Your job at this stage:**
+
+- Is this a problem where spatial patterns are the primary signal? (If not, GeoAI may not help.)
+- Can the answer be expressed as a classification, a prediction, or a detection? (Models need a concrete output type.)
+- What does "good enough" look like? A model that's 85% accurate for triage might be more valuable than 99% accuracy that takes six months longer.
+- What is the spatial extent and resolution that the decision actually requires?
+
+### Stage 2: Data Assembly — Your Quality Instincts Are Essential
+
+Developers will source imagery and labels. Your role is to question whether the data is representative and appropriate.
+
+**Ask:**
+
+- Does the training data cover the geographic diversity of where we'll deploy? (Urban/rural, coastal/inland, flat/mountainous?)
+- What season and time of year was the training data collected? Does that match deployment conditions?
+- Are the labels consistent? (If three analysts labeled training data differently, the model learns confusion.)
+- What resolution do we need? (A 10m model can't answer parcel-level questions.)
+
+### Stage 3: Training — Light Touch, One Key Question
+
+You don't need to attend training runs. But ask one question: **"What geography is NOT represented in the training data?"** This directly tells you where the model will be weakest.
+
+### Stage 4: Evaluation — Your Most Critical Role
+
+When the developer shows you accuracy metrics, apply the same skepticism you'd apply to any analysis:
+
+- **"Accurate where?"** — Demand a geographic breakdown, not just one number.
+- **"Accurate for which classes?"** — A model that's 95% accurate overall but misses 40% of the rare class you care about is failing at its job.
+- **"How close was the test data to the training data?"** — If the answer is "we split randomly," the accuracy is inflated. (See [spatial autocorrelation leakage](#what-you-know).)
+- **"What does a wrong prediction look like on the ground?"** — Ask to see the errors on a map, not in a table.
+
+### Stage 5: Deployment — You Are the Primary Consumer
+
+This is where the model output enters your GIS workflows. You'll be the first to know if something looks wrong because you know what the landscape actually looks like.
+
+### Stage 6: Monitoring — You Are the Early Warning System
+
+Models degrade. Land cover changes, new development happens, sensors change. You will notice spatial anomalies in model output before any automated monitoring system catches them. **Report them.** Your feedback is the most valuable quality signal in the system.
+
+---
+
+## Part 3: Being a Critical Consumer of Model Output {#critical-consumer}
+
+When you receive GeoAI output — a classified raster, a detected feature set, a risk score layer — evaluate it with the same rigor you'd apply to any data product.
+
+### The Five-Minute Visual Inspection
+
+Before trusting any model output, spend five minutes doing what you already do well — looking at it spatially:
+
+1. **Zoom to an area you know well.** Does the output match ground reality in a place where you can personally verify?
+2. **Check the edges.** Model output often degrades at tile boundaries, image edges, and coverage margins.
+3. **Look at the hard cases.** Zoom to transition zones (urban-rural fringe, coast, mixed land cover). Models struggle where classes blend.
+4. **Check temporal coherence.** If this is a time series, do changes in the output correspond to real-world changes or model noise?
+5. **Compare to your existing layers.** Overlay the output on data you trust. Do obvious conflicts exist?
+
+### Red Flags in Model Output
+
+| Red Flag | What It Might Mean | What to Ask the Developer |
+|----------|-------------------|--------------------------|
+| Sharp rectangular artifacts | Tile boundary effects from the inference pipeline | "Are predictions consistent across tile boundaries?" |
+| Suspiciously uniform output in complex areas | The model is defaulting to the majority class | "What's the per-class accuracy in this region?" |
+| Excellent performance in the demo area, poor elsewhere | Overfitting to the training geography | "Where was the training data sourced? Was the model tested outside that area?" |
+| Cloud/shadow/seasonal artifacts classified as real features | Input data quality issues not filtered | "What preprocessing was applied? Is there a cloud mask?" |
+| Impossible predictions (buildings in water, forest on pavement) | Missing contextual constraints | "Does the model use any ancillary layers for post-processing?" |
+| Confidence scores are all very high (>0.95) | Poorly calibrated model — overconfident | "Has the confidence calibration been tested?" |
+
+### How to Give Useful Feedback
+
+When you find problems in model output, report them in ways the developer can act on:
+
+- **Be spatial.** "The output is wrong" is unhelpful. "The model classifies the agricultural area between coordinates X,Y and X,Y as impervious surface" is actionable.
+- **Be comparative.** "This area was correctly classified in last month's run but wrong now" helps isolate whether the issue is the model or the data.
+- **Note the pattern.** "Errors seem concentrated in shadowed north-facing slopes" points to a systematic failure mode, not random noise.
+- **Include your domain interpretation.** "I think this is misclassified because the spectral signature of recently harvested fields looks like bare soil" is a gift to a developer who doesn't have your field knowledge.
+
+---
+
+## Part 4: When to Request a GeoAI Model {#when-to-request}
+
+Not every spatial problem needs AI. Your GIS toolkit already solves many problems well. Use this decision framework to evaluate whether a GeoAI model would genuinely improve your work.
+
+### GeoAI Is Likely Worth It When...
+
+- You are **manually classifying or digitizing** the same type of feature repeatedly across large areas
+- You need to **detect change or anomalies** across a time series too large to inspect visually
+- The pattern you're looking for is **too complex for rule-based classification** (it's not a simple threshold or index)
+- You need **predictions for areas where you have no field data**, based on patterns from areas where you do
+- The task needs to happen **faster or more frequently** than your team can do manually
+
+### Traditional GIS Is Probably Better When...
+
+- The analysis involves **well-defined rules** (buffer, overlay, proximity) that don't require pattern learning
+- You need **deterministic, auditable results** where every step can be explained to a regulator
+- The spatial extent is small enough to **inspect and process manually** in reasonable time
+- The problem is **one-time or infrequent** — the effort to build a model exceeds the effort to just do the analysis
+- **Precision matters more than coverage** — you need to be right everywhere, not approximately right in most places
+
+---
+
+## Part 5: Conversation Starters — Question Templates {#question-templates}
+
+These templates help you start structured conversations with your GeoAI development team. Use them as starting points, not scripts.
+
+### Template A: "I Have a Workflow That Might Benefit from GeoAI"
+
+Use when you want to explore whether AI could help with something you currently do manually.
+
+| Question | Why You're Asking | Notes/Your Answer |
+|----------|-------------------|-------------------|
+| I currently [describe the task]. It takes me approximately [time] per [unit]. Could a model help? | Framing the problem in terms of effort and repetition | |
+| The input data I use is [describe: imagery type, resolution, vector layers, etc.] | Developer needs to know what's available | |
+| The output I need is [describe: classified map, detected features, risk scores, etc.] | Defines the model's task type | |
+| "Good enough" accuracy for my purposes would be approximately [describe] | Prevents over-engineering | |
+| The spatial extent I need to cover is [describe] and it needs to be updated [frequency] | Defines tempo and scale | |
+| The areas where accuracy matters most are [describe: specific geographies, land cover types, etc.] | Helps the developer prioritize evaluation | |
+| I would be willing to provide [describe: labeled examples, validation checks, domain review] | Clarifies your role in the process | |
+
+### Template B: "I'm Reviewing Model Output — Something Looks Wrong"
+
+Use when you've identified problems in model predictions.
+
+| Question | Why You're Asking | Notes/Your Answer |
+|----------|-------------------|-------------------|
+| In the area around [coordinates/place name], the model predicts [X] but I believe the correct answer is [Y] because [domain reason]. | Spatial, specific, and grounded in your expertise | |
+| Is this area represented in the training data? | Helps determine if this is a coverage gap | |
+| I see this same pattern of error in [describe other locations with similar characteristics]. | Establishes whether it's systematic | |
+| What was the model's confidence score for this prediction? | High confidence + wrong answer is a bigger problem than low confidence + wrong answer | |
+| Has the input data changed recently? (New imagery source, different season, updated vector layer?) | Isolates data issues from model issues | |
+
+### Template C: "I Want to Understand What the Model Can and Can't Do"
+
+Use when you've been handed model output and need to know how far to trust it.
+
+| Question | Why You're Asking | Notes/Your Answer |
+|----------|-------------------|-------------------|
+| Where was the training data from, geographically? | Your area may not be represented | |
+| What's the accuracy breakdown by [region/land cover/class]? | Aggregate accuracy hides local failures | |
+| What time period does the training data cover? | Models degrade with temporal distance from training data | |
+| What are the known limitations? (The model card should say.) | Every honest model has them | |
+| What resolution was the model trained on, and what resolution will I receive output at? | Prevents expectations beyond what the data supports | |
+| What should I do when I think the model is wrong? | Establishes the feedback loop | |
+| Under what conditions should I NOT use this model's output? | Most important question — when to fall back to manual analysis | |
+
+---
+
+## Part 6: Your Role in the GeoAI Lifecycle — A Summary {#your-role}
+
+You are not a bystander in the GeoAI process. You are the domain expert whose judgment makes the difference between a model that works on paper and one that works in the field.
+
+| Lifecycle Stage | Your Contribution | Time Investment |
+|----------------|-------------------|----------------|
+| **Problem framing** | Define the real spatial question, not the technically interesting one | A few meetings |
+| **Data assessment** | Judge whether training data is representative and appropriate | Review sessions |
+| **Evaluation review** | Apply spatial intuition to accuracy reports — demand geographic breakdowns | A few hours per model |
+| **Output consumption** | Integrate model results into your workflows with appropriate skepticism | Ongoing |
+| **Feedback provision** | Report spatial anomalies, errors, and drift with specificity | As encountered |
+| **Use case identification** | Recognize where your manual workflows could benefit from GeoAI | Continuous |
+
+::: {.callout-tip}
+## The Most Important Thing
+The developer builds the model. You tell them whether the model is building the right thing, trained on the right data, evaluated in the right places, and producing outputs that make sense in the real world. No model should go to production without a GIS professional's critical review. If your organization skips this step, that is a process failure — raise it.
+:::
+
+## Checklist: After Your Second Day
+
+- [ ] I can explain to a colleague what a GeoAI model does, using GIS terminology
+- [ ] I can identify at least three workflows in my current role where GeoAI might help
+- [ ] I know what questions to ask when reviewing model output
+- [ ] I know how to give spatially specific, actionable feedback to developers
+- [ ] I understand the difference between training accuracy and real-world performance
+- [ ] I know when traditional GIS is the better tool and can articulate why
+- [ ] I have reviewed my organization's model card template and understand what it contains
+- [ ] I know who the GeoAI developers in my organization are and how to reach them
